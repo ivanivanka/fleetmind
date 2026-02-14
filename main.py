@@ -144,6 +144,20 @@ async def stop_robot(robot_id: str):
         return {"status": "stopped", "robot_id": robot_id}
     return JSONResponse(status_code=404, content={"error": "Robot not found"})
 
+@app.post("/api/sim/pause")
+async def pause_sim():
+    sim.pause()
+    # E-stop should be obvious: stop robots and re-queue in-flight tasks.
+    for r in list(sim.robots.values()):
+        sim.emergency_stop_robot(r.id)
+    return {"paused": True}
+
+
+@app.post("/api/sim/resume")
+async def resume_sim():
+    sim.resume()
+    return {"paused": False}
+
 
 @app.post("/api/tasks/create")
 async def create_task(pickup_x: int = 2, pickup_y: int = 2, dropoff_x: int = 37, dropoff_y: int = 2, priority: str = "normal"):

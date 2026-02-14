@@ -8,6 +8,7 @@ let ws = null;
 let selectedRobot = null;
 let startTime = Date.now();
 let cellSize = 20;
+let _actionTimer = null;
 
 // Colors
 const COLORS = {
@@ -234,6 +235,15 @@ function render() {
 }
 
 // -- Dashboard Updates --
+function setActionStatus(text, kind = '') {
+    const el = document.getElementById('action-status');
+    if (!el) return;
+    el.className = 'action-status' + (kind ? ' ' + kind : '');
+    el.textContent = text || '';
+    if (_actionTimer) clearTimeout(_actionTimer);
+    if (text) _actionTimer = setTimeout(() => { el.textContent = ''; el.className = 'action-status'; }, 3500);
+}
+
 function updateDashboard() {
     if (!state) return;
     const { metrics, robots, tasks, alerts, tick } = state;
@@ -264,6 +274,21 @@ function updateDashboard() {
     document.getElementById('m-charging').textContent = `${metrics.robots_charging} charging`;
 
     document.getElementById('m-distance').textContent = Math.round(metrics.total_distance);
+
+    // Pause / E-stop UI
+    const paused = !!state.paused;
+    const badge = document.getElementById('sim-badge');
+    const status = document.getElementById('sim-status');
+    if (badge && status) {
+        badge.classList.toggle('live', !paused);
+        badge.classList.toggle('paused', paused);
+        status.textContent = paused ? 'Simulation Paused' : 'Simulation Live';
+    }
+    const estopBtn = document.getElementById('estop-btn');
+    if (estopBtn) {
+        estopBtn.textContent = paused ? 'Resume' : 'E-Stop All';
+        estopBtn.className = paused ? 'btn primary' : 'btn danger';
+    }
 
     // Fleet list
     document.getElementById('fleet-count').textContent = robots.length;
@@ -332,9 +357,13 @@ async function addTask() {
     try {
         const res = await fetch('/api/tasks/create', { method: 'POST' });
         const data = await res.json();
-        console.log('Task created:', data);
+        if (data && data.status === 'created') {
+            setActionStatus(`Task created: ${data.task_id}`, 'ok');
+        } else {
+            setActionStatus('Task create failed', 'err');
+        }
     } catch (e) {
-        console.error('Failed to create task:', e);
+        setActionStatus('Task create failed', 'err');
     }
 }
 
@@ -345,8 +374,10 @@ async function requestAIInsight() {
         const res = await fetch('/api/ai/insight?mode=gemini');
         const data = await res.json();
         el.textContent = data.insight;
+        setActionStatus(`AI insight updated (${data.source || 'unknown'})`, data.source === 'gemini' ? 'ok' : 'warn');
     } catch (e) {
         el.textContent = 'AI analysis unavailable';
+        setActionStatus('AI insight failed', 'err');
     }
 }
 
@@ -360,14 +391,16 @@ async function dismissAlert(id) {
 
 async function emergencyStopAll() {
     if (!state) return;
-    for (const robot of state.robots) {
-        if (robot.state !== 'idle' && robot.state !== 'charging') {
-            try {
-                await fetch(`/api/robots/${robot.id}/stop`, { method: 'POST' });
-            } catch (e) {
-                console.error(`Failed to stop ${robot.id}:`, e);
-            }
+    try {
+        if (state.paused) {
+            await fetch('/api/sim/resume', { method: 'POST' });
+            setActionStatus('Simulation resumed', 'ok');
+        } else {
+            await fetch('/api/sim/pause', { method: 'POST' });
+            setActionStatus('E-stop engaged (paused)', 'warn');
         }
+    } catch (e) {
+        setActionStatus('E-stop failed', 'err');
     }
 }
 

@@ -22,7 +22,7 @@
                 </svg>
                 <span><span class="logo-muted">Markster</span> Fleet<span class="logo-accent">Mind</span> AI</span>
             </div>
-            <div class="status-badge live">
+            <div class="status-badge live" id="sim-badge">
                 <span class="dot"></span>
                 <span id="sim-status">Simulation Live</span>
             </div>
@@ -111,8 +111,9 @@
             <div class="controls">
                 <button class="btn primary" onclick="addTask()">+ Add Task</button>
                 <button class="btn" onclick="requestAIInsight()">AI Insight</button>
-                <button class="btn danger" onclick="emergencyStopAll()">E-Stop All</button>
+                <button class="btn danger" id="estop-btn" onclick="emergencyStopAll()">E-Stop All</button>
             </div>
+            <div class="action-status" id="action-status"></div>
 
             <!-- Fleet -->
             <div class="sidebar-section">

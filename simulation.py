@@ -34,6 +34,7 @@ class WarehouseSimulation:
         self.alerts: list[Alert] = []
         self.metrics_history: list[MetricsSnapshot] = []
         self.running = False
+        self.paused = False
         self.tick_count = 0
         self.start_time = 0.0
         self.last_task_time = 0.0
@@ -414,6 +415,7 @@ class WarehouseSimulation:
         return {
             "type": "state_update",
             "tick": self.tick_count,
+            "paused": self.paused,
             "grid": {
                 "width": self.config.width,
                 "height": self.config.height,
@@ -470,8 +472,14 @@ class WarehouseSimulation:
 
     async def tick(self):
         """Run one simulation tick."""
-        self.tick_count += 1
         now = time.time()
+
+        # E-stop / pause: keep broadcasting but don't mutate the world.
+        if self.paused:
+            await self._broadcast(self.get_state())
+            return
+
+        self.tick_count += 1
 
         # Generate new tasks periodically
         if now - self.last_task_time >= self.config.task_generation_rate:
@@ -511,6 +519,12 @@ class WarehouseSimulation:
 
     def stop(self):
         self.running = False
+
+    def pause(self):
+        self.paused = True
+
+    def resume(self):
+        self.paused = False
 
     def acknowledge_alert(self, alert_id: str) -> bool:
         for alert in self.alerts:

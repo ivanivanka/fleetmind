@@ -87,6 +87,16 @@ body {
     color: var(--green);
 }
 
+.status-badge.paused {
+    background: var(--yellow-dim);
+    color: var(--yellow);
+}
+
+.status-badge.paused .dot {
+    background: var(--yellow);
+    animation: none;
+}
+
 .status-badge .dot {
     width: 6px;
     height: 6px;
@@ -495,6 +505,17 @@ body {
     gap: 6px;
     flex-wrap: wrap;
 }
+
+.action-status {
+    padding: 0 12px 10px 12px;
+    min-height: 14px;
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.action-status.ok { color: var(--green); }
+.action-status.warn { color: var(--yellow); }
+.action-status.err { color: var(--red); }
 
 .btn {
     padding: 5px 10px;
