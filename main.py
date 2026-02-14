@@ -1,0 +1,164 @@
+"""FleetMind AI - Warehouse Robot Fleet Orchestration Platform."""
+
+import asyncio
+import json
+import logging
+import os
+
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.staticfiles import StaticFiles
+
+from simulation import WarehouseSimulation
+from gemini_client import FleetMindAI
+from models import WarehouseConfig
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+app = FastAPI(title="FleetMind AI", version="1.0.0")
+
+# Global simulation instance
+sim: WarehouseSimulation = None
+ai: FleetMindAI = None
+sim_task: asyncio.Task = None
+
+
+@app.on_event("startup")
+async def startup():
+    global sim, ai, sim_task
+    config = WarehouseConfig(
+        num_robots=int(os.environ.get("FLEET_SIZE", "12")),
+        task_generation_rate=float(os.environ.get("TASK_RATE", "3.0")),
+    )
+    sim = WarehouseSimulation(config)
+    ai = FleetMindAI()
+    sim_task = asyncio.create_task(sim.run(tick_interval=0.3))
+    logger.info(f"FleetMind started with {config.num_robots} robots")
+
+
+@app.on_event("shutdown")
+async def shutdown():
+    if sim:
+        sim.stop()
+    if sim_task:
+        sim_task.cancel()
+
+
+# Serve static files
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+
+@app.get("/", response_class=HTMLResponse)
+async def root():
+    with open("static/index.html", "r") as f:
+        return HTMLResponse(content=f.read())
+
+
+@app.websocket("/ws")
+async def websocket_endpoint(ws: WebSocket):
+    await ws.accept()
+    queue = sim.subscribe()
+    try:
+        # Send initial state immediately
+        state = sim.get_state()
+        await ws.send_json(state)
+
+        while True:
+            try:
+                data = await asyncio.wait_for(queue.get(), timeout=5.0)
+                await ws.send_json(data)
+            except asyncio.TimeoutError:
+                # Send heartbeat
+                await ws.send_json({"type": "heartbeat"})
+    except WebSocketDisconnect:
+        pass
+    except Exception as e:
+        logger.warning(f"WebSocket error: {e}")
+    finally:
+        sim.unsubscribe(queue)
+
+
+@app.get("/api/metrics")
+async def get_metrics():
+    return JSONResponse(content=sim.get_metrics().model_dump())
+
+
+@app.get("/api/metrics/history")
+async def get_metrics_history():
+    return JSONResponse(content=[m.model_dump() for m in sim.metrics_history[-60:]])
+
+
+@app.get("/api/robots")
+async def get_robots():
+    state = sim.get_state()
+    return JSONResponse(content=state["robots"])
+
+
+@app.get("/api/tasks")
+async def get_tasks():
+    state = sim.get_state()
+    return JSONResponse(content=state["tasks"])
+
+
+@app.get("/api/alerts")
+async def get_alerts():
+    return JSONResponse(content=[
+        {
+            "id": a.id,
+            "type": a.type,
+            "message": a.message,
+            "robot_id": a.robot_id,
+            "timestamp": a.timestamp,
+        }
+        for a in sim.alerts[-20:]
+        if not a.acknowledged
+    ])
+
+
+@app.post("/api/alerts/{alert_id}/acknowledge")
+async def acknowledge_alert(alert_id: str):
+    if sim.acknowledge_alert(alert_id):
+        return {"status": "acknowledged"}
+    return JSONResponse(status_code=404, content={"error": "Alert not found"})
+
+
+@app.post("/api/robots/{robot_id}/stop")
+async def stop_robot(robot_id: str):
+    if sim.emergency_stop_robot(robot_id):
+        return {"status": "stopped", "robot_id": robot_id}
+    return JSONResponse(status_code=404, content={"error": "Robot not found"})
+
+
+@app.post("/api/tasks/create")
+async def create_task(pickup_x: int = 2, pickup_y: int = 2, dropoff_x: int = 37, dropoff_y: int = 2, priority: str = "normal"):
+    task = sim.add_manual_task(pickup_x, pickup_y, dropoff_x, dropoff_y, priority)
+    if task:
+        return {"status": "created", "task_id": task.id}
+    return JSONResponse(status_code=400, content={"error": "Failed to create task"})
+
+
+@app.get("/api/ai/insight")
+async def get_ai_insight():
+    metrics = sim.get_metrics().model_dump()
+    insight = await ai.generate_insight(metrics)
+    return {"insight": insight}
+
+
+@app.get("/api/ai/prioritize")
+async def ai_prioritize():
+    state = sim.get_state()
+    queued_tasks = [t for t in state["tasks"] if t["status"] == "queued"]
+    result = await ai.prioritize_tasks(queued_tasks, state["robots"], state["metrics"])
+    return {"prioritized_tasks": result}
+
+
+@app.get("/api/config")
+async def get_config():
+    return JSONResponse(content=sim.config.model_dump())
+
+
+if __name__ == "__main__":
+    import uvicorn
+    port = int(os.environ.get("PORT", "8000"))
+    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=False)
