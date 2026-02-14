@@ -18,7 +18,8 @@
 
 3. **Operator controls**
    - Click **+ Add Task** a few times to create backlog.
-   - Click **E-Stop All** to stop active robots (then watch tasks re-queue).
+   - Click **E-Stop All** to pause the simulation and stop robots (tasks re-queue).
+   - Click **Resume** to continue.
 
 4. **Gemini AI insight**
    - Click **AI Insight** (and/or wait for auto-refresh).
