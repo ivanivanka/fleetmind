@@ -1,5 +1,6 @@
 """Gemini AI integration for intelligent task prioritization and anomaly detection."""
 
+import asyncio
 import json
 import os
 import logging
@@ -126,8 +127,9 @@ Be specific and actionable. No fluff."""
 
     async def _generate(self, prompt: str) -> str:
         """Call Gemini API."""
-        response = self.model.generate_content(prompt)
-        return response.text
+        # google-generativeai is synchronous; run it in a thread to avoid blocking the event loop.
+        response = await asyncio.to_thread(self.model.generate_content, prompt)
+        return response.text or ""
 
     def _fallback_prioritize(self, tasks: list[dict]) -> list[dict]:
         """Simple priority-based fallback when Gemini is unavailable."""

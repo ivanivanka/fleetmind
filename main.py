@@ -4,6 +4,7 @@ import asyncio
 import json
 import logging
 import os
+import time
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.responses import HTMLResponse, JSONResponse
@@ -22,6 +23,9 @@ app = FastAPI(title="FleetMind AI", version="1.0.0")
 sim: WarehouseSimulation = None
 ai: FleetMindAI = None
 sim_task: asyncio.Task = None
+
+_ai_insight_cache: dict[str, object] = {"ts": 0.0, "insight": "Initializing fleet intelligence..."}
+_ai_insight_lock = asyncio.Lock()
 
 
 @app.on_event("startup")
@@ -53,6 +57,10 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 async def root():
     with open("static/index.html", "r") as f:
         return HTMLResponse(content=f.read())
+
+@app.get("/healthz")
+async def healthz():
+    return {"ok": True, "sim": bool(sim)}
 
 
 @app.websocket("/ws")
@@ -140,9 +148,21 @@ async def create_task(pickup_x: int = 2, pickup_y: int = 2, dropoff_x: int = 37,
 
 @app.get("/api/ai/insight")
 async def get_ai_insight():
-    metrics = sim.get_metrics().model_dump()
-    insight = await ai.generate_insight(metrics)
-    return {"insight": insight}
+    # Cache AI calls to avoid blowing through free-tier quotas when multiple clients are connected.
+    now = time.time()
+    if now - float(_ai_insight_cache["ts"]) < 15:
+        return {"insight": _ai_insight_cache["insight"], "cached": True}
+
+    async with _ai_insight_lock:
+        now = time.time()
+        if now - float(_ai_insight_cache["ts"]) < 15:
+            return {"insight": _ai_insight_cache["insight"], "cached": True}
+
+        metrics = sim.get_metrics().model_dump()
+        insight = await ai.generate_insight(metrics)
+        _ai_insight_cache["ts"] = now
+        _ai_insight_cache["insight"] = insight
+        return {"insight": insight, "cached": False}
 
 
 @app.get("/api/ai/prioritize")
