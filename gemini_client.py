@@ -19,12 +19,13 @@ except ImportError:
 class FleetMindAI:
     def __init__(self):
         self.api_key = os.environ.get("GEMINI_API_KEY", "")
+        self.model_name = os.environ.get("GEMINI_MODEL", "gemini-flash-latest")
         self.model = None
         if GEMINI_AVAILABLE and self.api_key:
             try:
                 genai.configure(api_key=self.api_key)
-                self.model = genai.GenerativeModel("gemini-2.0-flash")
-                logger.info("Gemini AI initialized successfully")
+                self.model = genai.GenerativeModel(self.model_name)
+                logger.info(f"Gemini AI initialized successfully (model={self.model_name})")
             except Exception as e:
                 logger.warning(f"Failed to initialize Gemini: {e}")
 

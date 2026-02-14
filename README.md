@@ -45,6 +45,7 @@ Open http://localhost:8000
 | `FLEET_SIZE` | `12` | Number of robots |
 | `TASK_RATE` | `3.0` | Seconds between new tasks |
 | `GEMINI_API_KEY` | - | Google Gemini API key (optional, falls back to rule-based AI) |
+| `GEMINI_MODEL` | `gemini-flash-latest` | Gemini model name (only used if `GEMINI_API_KEY` is set) |
 
 ## Docker
 
