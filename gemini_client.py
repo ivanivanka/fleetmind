@@ -4,7 +4,6 @@ import asyncio
 import json
 import os
 import logging
-from typing import Optional
 
 logger = logging.getLogger(__name__)
 
@@ -98,10 +97,13 @@ Return ONLY a JSON array. If no anomalies, return []."""
 
         return []
 
-    async def generate_insight(self, metrics: dict) -> Optional[str]:
+    def rules_insight(self, metrics: dict) -> str:
+        return self._fallback_insight(metrics)
+
+    async def generate_insight(self, metrics: dict) -> dict[str, object]:
         """Generate a brief operational insight for the dashboard."""
         if not self.model:
-            return self._fallback_insight(metrics)
+            return {"insight": self._fallback_insight(metrics), "source": "rules"}
 
         prompt = f"""You are a warehouse operations AI advisor. Based on these current fleet metrics,
 provide ONE brief operational insight (1-2 sentences max).
@@ -120,10 +122,16 @@ Be specific and actionable. No fluff."""
 
         try:
             response = await self._generate(prompt)
-            return response.strip()[:200]
+            text = (response or "").strip()
+            if not text:
+                return {"insight": self._fallback_insight(metrics), "source": "rules", "error": "empty_response"}
+            return {"insight": text[:200], "source": "gemini"}
         except Exception as e:
-            logger.warning(f"Gemini insight generation failed: {e}")
-            return self._fallback_insight(metrics)
+            msg = str(e)
+            err = "quota_exceeded" if ("429" in msg or "quota" in msg.lower()) else "gemini_error"
+            brief = msg.splitlines()[0][:200]
+            logger.warning(f"Gemini insight generation failed ({err}): {brief}")
+            return {"insight": self._fallback_insight(metrics), "source": "rules", "error": err}
 
     async def _generate(self, prompt: str) -> str:
         """Call Gemini API."""

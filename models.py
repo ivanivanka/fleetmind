@@ -1,4 +1,4 @@
-"""Data models for FleetMind warehouse simulation."""
+"""Data models for Markster FleetMind AI warehouse simulation."""
 
 from enum import Enum
 from pydantic import BaseModel
@@ -104,6 +104,8 @@ class WarehouseConfig(BaseModel):
     num_robots: int = 12
     num_charging_stations: int = 4
     task_generation_rate: float = 3.0  # seconds between new tasks
+    max_queued_tasks: int = 25  # soft cap to keep the demo stable/legible
+    max_total_tasks: int = 2000  # prevent unbounded growth over long runtimes
     battery_drain_per_move: float = 0.3
     battery_charge_per_tick: float = 2.0
     low_battery_threshold: float = 20.0

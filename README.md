@@ -82,6 +82,8 @@ Health check: `GET /healthz`
 | `PORT` | `8000` | Server port |
 | `FLEET_SIZE` | `12` | Number of robots |
 | `TASK_RATE` | `3.0` | Seconds between new tasks |
+| `MAX_QUEUED_TASKS` | `25` | Soft cap on queued tasks (keeps the demo stable/legible) |
+| `MAX_TOTAL_TASKS` | `2000` | Max task history retained in memory |
 | `GEMINI_API_KEY` | - | Google Gemini API key (optional, falls back to rule-based AI) |
 | `GEMINI_MODEL` | `gemini-flash-latest` | Gemini model name (only used if `GEMINI_API_KEY` is set) |
 

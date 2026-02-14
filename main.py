@@ -24,7 +24,12 @@ sim: WarehouseSimulation = None
 ai: FleetMindAI = None
 sim_task: asyncio.Task = None
 
-_ai_insight_cache: dict[str, object] = {"ts": 0.0, "insight": "Initializing fleet intelligence..."}
+_ai_insight_cache: dict[str, object] = {
+    "ts": 0.0,
+    "insight": "Initializing fleet intelligence...",
+    "source": "rules",
+    "error": None,
+}
 _ai_insight_lock = asyncio.Lock()
 
 
@@ -34,6 +39,8 @@ async def startup():
     config = WarehouseConfig(
         num_robots=int(os.environ.get("FLEET_SIZE", "12")),
         task_generation_rate=float(os.environ.get("TASK_RATE", "3.0")),
+        max_queued_tasks=int(os.environ.get("MAX_QUEUED_TASKS", "25")),
+        max_total_tasks=int(os.environ.get("MAX_TOTAL_TASKS", "2000")),
     )
     sim = WarehouseSimulation(config)
     ai = FleetMindAI()
@@ -147,22 +154,40 @@ async def create_task(pickup_x: int = 2, pickup_y: int = 2, dropoff_x: int = 37,
 
 
 @app.get("/api/ai/insight")
-async def get_ai_insight():
-    # Cache AI calls to avoid blowing through free-tier quotas when multiple clients are connected.
+async def get_ai_insight(mode: str = "rules"):
+    metrics = sim.get_metrics().model_dump()
+
+    # Default mode is a rules-based insight (no Gemini call). Gemini is opt-in.
+    if mode != "gemini":
+        return {"insight": ai.rules_insight(metrics), "source": "rules", "cached": True}
+
+    # Cache Gemini calls to avoid blowing through free-tier quotas when multiple clients are connected.
+    ttl_s = 300
     now = time.time()
-    if now - float(_ai_insight_cache["ts"]) < 15:
-        return {"insight": _ai_insight_cache["insight"], "cached": True}
+    if now - float(_ai_insight_cache["ts"]) < ttl_s:
+        return {
+            "insight": _ai_insight_cache["insight"],
+            "source": _ai_insight_cache["source"],
+            "error": _ai_insight_cache["error"],
+            "cached": True,
+        }
 
     async with _ai_insight_lock:
         now = time.time()
-        if now - float(_ai_insight_cache["ts"]) < 15:
-            return {"insight": _ai_insight_cache["insight"], "cached": True}
+        if now - float(_ai_insight_cache["ts"]) < ttl_s:
+            return {
+                "insight": _ai_insight_cache["insight"],
+                "source": _ai_insight_cache["source"],
+                "error": _ai_insight_cache["error"],
+                "cached": True,
+            }
 
-        metrics = sim.get_metrics().model_dump()
-        insight = await ai.generate_insight(metrics)
+        result = await ai.generate_insight(metrics)
         _ai_insight_cache["ts"] = now
-        _ai_insight_cache["insight"] = insight
-        return {"insight": insight, "cached": False}
+        _ai_insight_cache["insight"] = result.get("insight")
+        _ai_insight_cache["source"] = result.get("source")
+        _ai_insight_cache["error"] = result.get("error")
+        return {**result, "cached": False}
 
 
 @app.get("/api/ai/prioritize")

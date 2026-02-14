@@ -210,6 +210,21 @@ class WarehouseSimulation:
         )
         self.tasks[task.id] = task
 
+    def _queued_task_count(self) -> int:
+        return sum(1 for t in self.tasks.values() if t.status == TaskStatus.QUEUED)
+
+    def _prune_tasks(self):
+        """Prevent unbounded growth by dropping oldest terminal tasks."""
+        max_total = int(getattr(self.config, "max_total_tasks", 2000) or 0)
+        if max_total <= 0 or len(self.tasks) <= max_total:
+            return
+
+        terminal = [t for t in self.tasks.values() if t.status in (TaskStatus.COMPLETED, TaskStatus.FAILED)]
+        terminal.sort(key=lambda t: t.created_at)  # oldest first
+        to_remove = len(self.tasks) - max_total
+        for t in terminal[:to_remove]:
+            self.tasks.pop(t.id, None)
+
     def _assign_tasks(self):
         """Assign queued tasks to idle robots based on proximity and priority."""
         priority_order = {
@@ -460,12 +475,15 @@ class WarehouseSimulation:
 
         # Generate new tasks periodically
         if now - self.last_task_time >= self.config.task_generation_rate:
-            self._generate_task()
+            # Soft-cap the queue to keep the demo stable/legible.
+            if self._queued_task_count() < int(getattr(self.config, "max_queued_tasks", 25) or 25):
+                self._generate_task()
             self.last_task_time = now
 
         self._check_battery()
         self._assign_tasks()
         self._move_robots()
+        self._prune_tasks()
 
         # Broadcast state
         state = self.get_state()

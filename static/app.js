@@ -342,7 +342,7 @@ async function requestAIInsight() {
     const el = document.getElementById('ai-insight');
     el.textContent = 'Analyzing fleet patterns...';
     try {
-        const res = await fetch('/api/ai/insight');
+        const res = await fetch('/api/ai/insight?mode=gemini');
         const data = await res.json();
         el.textContent = data.insight;
     } catch (e) {
@@ -394,7 +394,7 @@ canvas.addEventListener('click', (e) => {
 // -- AI Insight auto-refresh --
 setInterval(async () => {
     try {
-        const res = await fetch('/api/ai/insight');
+        const res = await fetch('/api/ai/insight?mode=rules');
         const data = await res.json();
         document.getElementById('ai-insight').textContent = data.insight;
     } catch (e) { /* ignore */ }

@@ -7,6 +7,8 @@ services:
       PORT: "8000"
       FLEET_SIZE: "${FLEET_SIZE:-12}"
       TASK_RATE: "${TASK_RATE:-3.0}"
+      MAX_QUEUED_TASKS: "${MAX_QUEUED_TASKS:-25}"
+      MAX_TOTAL_TASKS: "${MAX_TOTAL_TASKS:-2000}"
       GEMINI_API_KEY: "${GEMINI_API_KEY:-}"
       GEMINI_MODEL: "${GEMINI_MODEL:-gemini-flash-latest}"
     restart: unless-stopped

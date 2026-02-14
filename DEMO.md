@@ -27,7 +27,8 @@
 ## Useful Endpoints
 
 - `GET /healthz`
-- `GET /api/ai/insight`
+- `GET /api/ai/insight` (rules mode by default)
+- `GET /api/ai/insight?mode=gemini` (attempt Gemini; cached)
 - `GET /api/metrics`
 - `GET /api/robots`
 - `GET /api/tasks`
