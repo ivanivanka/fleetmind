@@ -4,6 +4,23 @@ This is a copy/paste-ready brief for building a standard Sequoia-style pitch dec
 It’s written to be honest about the current MVP (simulation-first) while still
 telling a credible product story.
 
+## Slide 0: Cover (Title + Links)
+
+**Title:** Markster FleetMind AI
+
+**Subtitle:** Control plane for warehouse robot fleets (simulation-first)
+
+**Links (put in small text):**
+- Live demo: `http://149.28.198.127/`
+- GitHub: `https://github.com/ivanivanka/fleetmind`
+
+**Contact (put in footer):**
+- Ivan Ivanka (Founder, Markster)
+- LinkedIn: `https://www.linkedin.com/in/ivanivanka/`
+- WhatsApp: `+1 212 718 1149`
+
+---
+
 ## Slide 1: Company Purpose
 
 **Title (one line):** Markster FleetMind AI is the control plane for warehouse robot fleets.
@@ -55,6 +72,26 @@ telling a credible product story.
 - Robot connectors: ROS2 / vendor APIs, map import, real telemetry
 - Policy engine: zone rules, speed limits, safety constraints, SLA targets
 - Optimization: batching, charging strategies, congestion-aware routing
+
+---
+
+## Optional Slide: How It Works (Architecture + Deployment)
+
+**One sentence:** Web ops dashboard + centralized backend orchestrator deployed on Vultr.
+
+**Block diagram (simple):**
+- Browser UI (canvas + ops panels)
+- WebSocket stream (live state) + REST endpoints (actions)
+- Vultr VM (FastAPI):
+  - simulation engine (robot state machine + A* routing + collision checks)
+  - scheduler/dispatcher (priority + nearest-robot assignment)
+  - battery/charging management
+  - metrics + alerts
+  - optional Gemini “ops copilot”
+
+**Deployment notes (1–2 bullets):**
+- Docker Compose on Vultr VM, public URL in any browser
+- Simulation-first by design; same backend pattern extends to real robots via connectors
 
 ---
 
@@ -142,8 +179,8 @@ telling a credible product story.
 - “We build practical AI systems for operations, and we’re starting where customers can validate quickly: simulation + ops tooling.”
 
 **Include:**
-- Founder bio (ops + AI + systems)
-- Any relevant prior wins (if available)
+- Ivan Ivanka (Founder, Markster) — AI systems for operations + go-to-market execution
+- Contact: LinkedIn `https://www.linkedin.com/in/ivanivanka/` | WhatsApp `+1 212 718 1149`
 
 ---
 
@@ -155,6 +192,18 @@ telling a credible product story.
 
 **Vision (closing line):**
 - “Markster FleetMind AI becomes the operating system for autonomous warehouse operations: planning, coordination, and continuous optimization across heterogeneous robot fleets.”
+
+---
+
+## Optional Slide: Demo + Submission Links (Drop-In)
+
+Keep this as your final slide if you want judges to have everything in one place.
+
+- Live demo: `http://149.28.198.127/`
+- Health: `http://149.28.198.127/healthz`
+- GitHub repo: `https://github.com/ivanivanka/fleetmind`
+- Ops insight (rules): `GET /api/ai/insight`
+- Ops insight (Gemini, cached): `GET /api/ai/insight?mode=gemini`
 
 ---
 
