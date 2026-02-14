@@ -37,6 +37,44 @@ python main.py
 
 Open http://localhost:8000
 
+## Docker (Recommended)
+
+```bash
+# Optional: export GEMINI_API_KEY=...
+docker compose up -d --build
+```
+
+Open http://localhost:8000
+
+## Deploy To Vultr (VM + Docker)
+
+### Option A: One-command provision + deploy
+
+```bash
+# Requires: VULTR_API_KEY (Vultr v2 API token). GEMINI_API_KEY is optional.
+./scripts/vultr_provision_and_deploy.sh
+```
+
+### Option B: Manual deploy (existing VM)
+
+```bash
+apt-get update -y && apt-get install -y curl git
+curl -fsSL https://get.docker.com | sh
+
+git clone https://github.com/ivanivanka/fleetmind.git /opt/fleetmind
+cd /opt/fleetmind
+
+cat > .env <<'EOF'
+HOST_PORT=80
+GEMINI_MODEL=gemini-flash-latest
+GEMINI_API_KEY=your-key
+EOF
+
+docker compose up -d --build
+```
+
+Health check: `GET /healthz`
+
 ## Environment Variables
 
 | Variable | Default | Description |

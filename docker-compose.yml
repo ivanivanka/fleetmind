@@ -1,0 +1,12 @@
+services:
+  fleetmind:
+    build: .
+    ports:
+      - "${HOST_PORT:-8000}:8000"
+    environment:
+      PORT: "8000"
+      FLEET_SIZE: "${FLEET_SIZE:-12}"
+      TASK_RATE: "${TASK_RATE:-3.0}"
+      GEMINI_API_KEY: "${GEMINI_API_KEY:-}"
+      GEMINI_MODEL: "${GEMINI_MODEL:-gemini-flash-latest}"
+    restart: unless-stopped
