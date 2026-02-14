@@ -1,4 +1,4 @@
-"""FleetMind AI - Warehouse Robot Fleet Orchestration Platform."""
+"""Markster FleetMind AI - Warehouse Robot Fleet Orchestration Platform."""
 
 import asyncio
 import json
@@ -17,7 +17,7 @@ from models import WarehouseConfig
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-app = FastAPI(title="FleetMind AI", version="1.0.0")
+app = FastAPI(title="Markster FleetMind AI", version="1.0.0")
 
 # Global simulation instance
 sim: WarehouseSimulation = None

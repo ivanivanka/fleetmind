@@ -1,4 +1,4 @@
-/* FleetMind AI - Dashboard Frontend */
+/* Markster FleetMind AI - Dashboard Frontend */
 
 const canvas = document.getElementById('warehouse-canvas');
 const ctx = canvas.getContext('2d');

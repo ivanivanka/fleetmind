@@ -1,8 +1,8 @@
-# FleetMind (AI Meets Robotics) Submission Notes
+# Markster FleetMind AI (AI Meets Robotics) Submission Notes
 
 ## What It Is
 
-FleetMind is a simulation-first fleet orchestration platform for warehouse robots:
+Markster FleetMind AI is a simulation-first fleet orchestration platform for warehouse robots:
 
 - Real-time robot routing (A* pathfinding) with collision avoidance
 - Battery-aware scheduling with charging behavior
@@ -52,13 +52,13 @@ Status:
 ## Copy/Paste Text
 
 Project title:
-- **FleetMind AI — Warehouse Robot Fleet Orchestration (Simulation-First)**
+- **Markster FleetMind AI — Warehouse Robot Fleet Orchestration (Simulation-First)**
 
 Short description (1–2 lines):
-- FleetMind is a simulation-first control plane for warehouse robot fleets: real-time task assignment, collision-aware routing, battery/charging management, and an ops dashboard with AI insights.
+- Markster FleetMind AI is a simulation-first control plane for warehouse robot fleets: real-time task assignment, collision-aware routing, battery/charging management, and an ops dashboard with AI insights.
 
 Long description (suggested):
-- FleetMind helps warehouse operations teams run 10–100+ robots without needing a robotics engineering team. It provides a centralized backend for planning, coordination, and execution in a simulated warehouse environment (simulation-first is encouraged by the event). The system assigns tasks to robots based on priority and proximity, routes robots through aisles using A* pathfinding with collision avoidance, manages battery/charging behavior, and surfaces live metrics (throughput, utilization, queue depth) and alerts in a web dashboard via WebSocket. An optional Gemini integration generates concise operational insights and can re-prioritize queued tasks.
+- Markster FleetMind AI helps warehouse operations teams run 10–100+ robots without needing a robotics engineering team. It provides a centralized backend for planning, coordination, and execution in a simulated warehouse environment (simulation-first is encouraged by the event). The system assigns tasks to robots based on priority and proximity, routes robots through aisles using A* pathfinding with collision avoidance, manages battery/charging behavior, and surfaces live metrics (throughput, utilization, queue depth) and alerts in a web dashboard via WebSocket. An optional Gemini integration generates concise operational insights and can re-prioritize queued tasks.
 
 Suggested tags:
 - Robotics

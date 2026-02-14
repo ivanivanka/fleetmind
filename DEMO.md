@@ -1,9 +1,10 @@
-# FleetMind Demo Runbook
+# Markster FleetMind AI Demo Runbook
 
 ## Live Demo
 
 - Open the dashboard in your browser.
 - Confirm the status shows **Connected** and robots are moving.
+- The top bar includes attribution ("Demo by Ivan @ Markster") plus WhatsApp contact.
 
 ## What To Show (2-3 minutes)
 

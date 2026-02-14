@@ -1,4 +1,4 @@
-# FleetMind Pitch Deck Brief (Sequoia-Style)
+# Markster FleetMind AI Pitch Deck Brief (Sequoia-Style)
 
 This is a copy/paste-ready brief for building a standard Sequoia-style pitch deck.
 It’s written to be honest about the current MVP (simulation-first) while still
@@ -6,7 +6,7 @@ telling a credible product story.
 
 ## Slide 1: Company Purpose
 
-**Title (one line):** FleetMind is the control plane for warehouse robot fleets.
+**Title (one line):** Markster FleetMind AI is the control plane for warehouse robot fleets.
 
 **What to show:**
 - Product screenshot (dashboard + simulation canvas)
@@ -35,7 +35,7 @@ telling a credible product story.
 
 ## Slide 3: Solution
 
-**What FleetMind is:**
+**What Markster FleetMind AI is:**
 - A centralized orchestration backend + ops dashboard that:
   - assigns tasks
   - routes robots safely
@@ -154,7 +154,105 @@ telling a credible product story.
 - Unit economics model (per-robot SaaS + integration margin)
 
 **Vision (closing line):**
-- “FleetMind becomes the operating system for autonomous warehouse operations: planning, coordination, and continuous optimization across heterogeneous robot fleets.”
+- “Markster FleetMind AI becomes the operating system for autonomous warehouse operations: planning, coordination, and continuous optimization across heterogeneous robot fleets.”
+
+---
+
+## Optional Slide: Background (Where We Fit In the Warehouse Stack)
+
+Use this slide if the audience isn’t robotics-native (most investors aren’t).
+
+**The stack (plain English):**
+- **WMS** (Warehouse Management System): inventory + orders + planning (minutes/hours timescale)
+- **WES/WCS** (Execution/Control): releases work + coordinates fixed automation (seconds/minutes)
+- **RMS / Fleet managers**: robot-vendor-specific tools (seconds)
+- **Markster FleetMind AI**: vendor-neutral orchestration + ops visibility across fleets (seconds) with simulation-first validation
+
+**Why it matters:**
+- The “planning layer” knows what should happen.
+- The “fleet layer” decides what does happen in real time (routing, charging, congestion, failures).
+- That real-time layer is increasingly the bottleneck as fleets scale.
+
+**Visual:**
+- Simple layered diagram with “Markster FleetMind AI” bridging WMS/WES <-> multi-vendor fleets.
+
+---
+
+## Optional Slide: Customer + Day-In-The-Life
+
+**Persona:**
+- Director of Operations / Warehouse GM / Automation Lead at a 3PL or e-commerce DC
+
+**What they care about:**
+- On-time SLA, throughput, and downtime
+- “Why is the queue building?” and “Which aisle is congested?”
+- Robot downtime + charging bottlenecks
+
+**Current reality (pain):**
+- Alerts are noisy and reactive (you find out after throughput drops)
+- Vendor dashboards don’t explain cross-fleet bottlenecks
+- Every change feels risky without a sandbox
+
+**How we win (wedge):**
+- Start with simulation-first modeling of a facility and workload
+- Prove improvement in metrics, then integrate with 1 live fleet
+
+---
+
+## Optional Slide: Product Today vs Roadmap
+
+**Today (built MVP):**
+- Simulation-first “digital twin-ish” environment
+- Real-time orchestration loop: tasks -> assign -> route -> charge -> metrics/alerts
+- Live ops dashboard (WebSocket)
+- AI ops insight (optional) + AI reprioritization endpoint (optional)
+
+**Next 30–90 days (credible next steps):**
+- Robot connectors: ROS2 + 1–2 common AMR vendor APIs
+- Real telemetry ingestion: positions, battery, task states
+- Policy engine: zones, speed limits, safety constraints, SLAs
+- Optimization: batching, congestion-aware routing, charging strategy tuning
+
+**Next 6–12 months (platform):**
+- Multi-site fleet ops, user management, audit logs
+- Integrations: WMS/WES events in, KPI exports out
+- Learnable policies: data-driven routing/charging heuristics
+
+---
+
+## Optional Slide: Moat / Defensibility
+
+Keep this grounded and technical.
+
+**Defensibility sources:**
+- **Connectors**: hard-earned integrations across robot vendors + warehouse stacks
+- **Reliability playbooks**: failure modes, recovery strategies, safety guardrails
+- **Data loop**: telemetry + outcomes -> better policies (routing, batching, charging)
+- **Workflow lock-in**: ops teams live inside the dashboard; it becomes the system of record
+
+**Not the moat:**
+- “We have an LLM” (everyone does)
+
+---
+
+## Optional Slide: Pilot Plan + Success Metrics
+
+**Pilot (2–4 weeks):**
+- Import layout + define task model
+- Replay workload in simulation
+- Deliver KPI targets + integration plan
+
+**Production pilot (4–8 weeks):**
+- Connect to 1 robot fleet
+- Shadow mode -> partial control -> full control for a zone
+
+**Success metrics (choose 3):**
+- Throughput (tasks/hour) up
+- Robot utilization up
+- Congestion events down
+- Avg completion time down
+- Charging bottlenecks reduced
+- Alert volume reduced (and higher signal)
 
 ---
 

@@ -1,6 +1,6 @@
-# FleetMind AI - Warehouse Robot Fleet Orchestration
+# Markster FleetMind AI - Warehouse Robot Fleet Orchestration
 
-AI-powered warehouse fleet orchestration platform. FleetMind coordinates autonomous robot teams in simulation - real-time task routing, battery-aware scheduling, collision avoidance, and operator dashboards.
+AI-powered warehouse fleet orchestration platform. Markster FleetMind AI coordinates autonomous robot teams in simulation - real-time task routing, battery-aware scheduling, collision avoidance, and operator dashboards.
 
 Built for warehouse ops teams who need to manage 10-100+ robots without hiring robotics engineers.
 
@@ -104,7 +104,7 @@ docker run -p 8000:8000 -e GEMINI_API_KEY=your-key fleetmind
 
 Track 1: Autonomous Robotics Control in Simulation
 
-Team: Markster FleetMind
+Team: Markster FleetMind (Ivan @ Markster)
 
 ## License
 
