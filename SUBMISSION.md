@@ -77,3 +77,28 @@ Suggested tags:
 - WebSocket
 - Vultr
 - Gemini
+
+Suggested categories (pick 3–6):
+- Transportation and Delivery
+- Web Application
+- Cloud Application
+- Utility and Tools
+- Project Management (optional)
+- Productivity (optional)
+- ProjectFromScratch (optional)
+- Vultr Track - Raise (optional)
+
+Suggested technologies (form tags; only select what you used):
+- VULTR
+- Gemini AI
+- Gemini 3 Flash
+- AI Studio
+- deepmind
+- AI/ML API
+
+Nice-to-tag (if they appear in the picker):
+- FastAPI
+- WebSocket
+- Docker / Docker Compose
+- Python
+- HTML5 Canvas
