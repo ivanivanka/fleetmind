@@ -297,29 +297,90 @@ class WarehouseSimulation:
 
     def _move_robots(self):
         """Move each robot one step along its path."""
+        # Phase 1: charging/errors
         for robot in self.robots.values():
             if robot.state == RobotState.CHARGING:
                 robot.battery = min(100.0, robot.battery + self.config.battery_charge_per_tick)
                 if robot.battery >= 95.0:
                     robot.state = RobotState.IDLE
                     robot.target = None
-                continue
 
-            if robot.state == RobotState.ERROR:
+        # Phase 2: movement (handle swap deadlocks)
+        pos_to_id: dict[tuple[int, int], str] = {(r.position.x, r.position.y): r.id for r in self.robots.values()}
+        proposed: dict[str, tuple[int, int] | None] = {}
+        for r in self.robots.values():
+            if r.state in (RobotState.CHARGING, RobotState.ERROR):
+                proposed[r.id] = None
                 continue
+            if r.path:
+                nxt = r.path[0]
+                proposed[r.id] = (nxt.x, nxt.y)
+            else:
+                proposed[r.id] = None
 
-            if robot.path:
-                next_pos = robot.path[0]
-                # Collision check - is another robot at next position?
-                blocked = any(
-                    r.position == next_pos and r.id != robot.id
-                    for r in self.robots.values()
-                )
-                if not blocked:
-                    robot.position = next_pos
-                    robot.path.pop(0)
-                    robot.battery -= self.config.battery_drain_per_move
-                    robot.distance_traveled += 1
+        moved: set[str] = set()
+        swaps: list[tuple[str, str]] = []
+        for rid, nxt in proposed.items():
+            if nxt is None or rid in moved:
+                continue
+            other_id = pos_to_id.get(nxt)
+            if not other_id or other_id == rid or other_id in moved:
+                continue
+            # Head-on swap: A wants B's cell and B wants A's cell.
+            r = self.robots[rid]
+            other = self.robots[other_id]
+            if proposed.get(other_id) == (r.position.x, r.position.y):
+                # deterministic ordering to avoid double-including pairs
+                if rid < other_id:
+                    swaps.append((rid, other_id))
+
+        for a_id, b_id in swaps:
+            a = self.robots[a_id]
+            b = self.robots[b_id]
+            # Swap positions
+            a_pos = a.position
+            b_pos = b.position
+            a.position, b.position = b_pos, a_pos
+            if a.path:
+                a.path.pop(0)
+            if b.path:
+                b.path.pop(0)
+            a.battery -= self.config.battery_drain_per_move
+            b.battery -= self.config.battery_drain_per_move
+            a.distance_traveled += 1
+            b.distance_traveled += 1
+            moved.add(a_id)
+            moved.add(b_id)
+
+        # Recompute occupancy after swaps
+        pos_to_id = {(r.position.x, r.position.y): r.id for r in self.robots.values()}
+
+        # Normal moves into free cells
+        for r in self.robots.values():
+            if r.id in moved:
+                continue
+            if r.state in (RobotState.CHARGING, RobotState.ERROR):
+                continue
+            if not r.path:
+                continue
+            nxt = r.path[0]
+            key = (nxt.x, nxt.y)
+            if key not in pos_to_id:
+                # Move
+                pos_to_id.pop((r.position.x, r.position.y), None)
+                r.position = nxt
+                r.path.pop(0)
+                r.battery -= self.config.battery_drain_per_move
+                r.distance_traveled += 1
+                pos_to_id[(r.position.x, r.position.y)] = r.id
+                moved.add(r.id)
+
+        # Phase 3: state transitions and task state machine
+        for robot in self.robots.values():
+            if robot.state in (RobotState.ERROR,):
+                continue
+            if robot.state == RobotState.CHARGING:
+                continue
 
             # State transitions when path completed
             if not robot.path and robot.target:
