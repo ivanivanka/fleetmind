@@ -187,88 +187,90 @@ DeepMind's **Gemini Robotics-ER 1.5** is available via the Gemini API in Google 
 
 ---
 
-## FINAL DECK v3 — 6 Slides for Gamma (TIGHT — 5 min total)
+## FINAL DECK — 6 Slides for Gamma
 
-*Total speaking time budget: ~750 words. Demo eats ~90 sec. That leaves ~50 sec per other slide.*
-
-### SLIDE 1 — HOOK (~30 sec)
+### SLIDE 1 — HOOK
 
 **On slide:**
 - FleetMind AI
-- Physical intelligence for warehouse robot fleets
+- Physical intelligence for warehouse robot fleets.
 - Powered by Google Gemini Robotics
 - Ivan Ivanka & Attila Bartha | Markster
 
 **Speaker notes:**
-I'm Ivan, this is Attila. We built FleetMind — a control plane for warehouse robot fleets, powered by Google's Gemini Robotics. Five minutes, I'll show you the problem, the product, and the live demo.
+Hey everyone, I'm Ivan from Markster. This is my co-founder Attila. FleetMind is a control plane for warehouse robot fleets — powered by Google's Gemini Robotics stack. Let me show you why this matters.
 
 ---
 
-### SLIDE 2 — THE PROBLEM (~50 sec)
+### SLIDE 2 — THE GAP
 
 **On slide:**
-- $10.9B warehouse robotics market in 2026 (Mordor Intelligence)
-- Existing platforms serve enterprise: FleetBridge, OmniPath, Locus, 6 River — $500K+ integration, vendor-locked
-- Mid-size warehouses (10-100 robots, multiple vendors): fastest-growing buyer segment. No intelligence layer exists.
-- "Most warehouses have zero visibility on how robot fleets impact inventory turns." — Robert Lee, 15yr warehouse ops
+- $8.7B warehouse robotics market. 14.8% CAGR → $22.9B by 2032.
+- Amazon alone: 750,000+ robots. 50% of large warehouses deploying by end 2025.
+- Enterprise platforms (FleetBridge, OmniPath, Locus, 6 River): $500K+ integration. Vendor-locked. Need dedicated robotics teams.
+- Mid-size operator (10-100 robots): fastest-growing buyer. No intelligence. No cross-fleet visibility.
+- "Most warehouses have zero visibility on how their robot fleets impact inventory turns." — Robert Lee, 15yr warehouse ops
 
 **Speaker notes:**
-$10.9 billion market in 2026. The orchestration platforms exist — FleetBridge, OmniPath, Locus, 6 River. They all serve enterprise. $500K integrations, vendor lock-in, dedicated robotics teams required. But the fastest-growing buyer is the mid-size operator running 10 to 100 robots from multiple manufacturers. They have no intelligence layer. No cross-fleet visibility. Nobody is building for them.
+The warehouse robotics market is $8.7 billion today, growing at 14.8% to $23 billion by 2032. Amazon alone runs over 750,000 robots. Half of large warehouses will deploy robots by end of this year. The orchestration platforms exist — FleetBridge, OmniPath, Locus, 6 River — but they all build for enterprise: $500K integration budgets, dedicated robotics teams, vendor lock-in. The fastest-growing buyer is the mid-size warehouse running 10 to 100 robots from two or three different manufacturers. And they get nothing. A 15-year warehouse ops veteran told me most operators have zero visibility on how their fleets impact inventory turns. That's $288 million in addressable revenue in the US alone that nobody is serving.
 
 ---
 
-### SLIDE 3 — THE PRODUCT (Gemini Robotics Stack) (~60 sec)
+### SLIDE 3 — HOW (Gemini Robotics Stack)
 
 **On slide:**
 - One AI brain. Any vendor. Any scale.
-- Hackathon prototype (~6 hrs): Gemini API + A* pathfinding + real-time WebSocket
-- Production roadmap: **Gemini Robotics-ER 1.5** (in preview, Google AI Studio)
-  - Task decomposition → breaks "fulfill order" into robot subtasks
-  - Spatial understanding → reads warehouse layout, predicts congestion
-  - Function calling → vendor-specific robot APIs as callable functions (= vendor-agnostic at the API level)
-  - Temporal reasoning → why did throughput drop? predictive charging
-- Stack: Python | FastAPI | WebSocket | Docker | Gemini API
+- Today (hackathon, built in ~6 hours): Gemini API for fleet intelligence + A* pathfinding + WebSocket real-time
+- Production: **Gemini Robotics-ER 1.5** — DeepMind's vision-language model for physical agents
+  - Task decomposition: "Fulfill order #4521" → locate, dispatch, route, pick, transport, verify
+  - Spatial understanding: congestion detection, bottleneck prediction from sensor feeds
+  - Function calling: vendor-specific robot APIs as callable functions — this is how vendor-agnostic works at the API level
+  - Temporal reasoning: why did throughput drop after 2pm? Which charging patterns cause 4pm bottlenecks?
+- Background: Python | FastAPI | WebSocket | Docker | Gemini API
 
 **Speaker notes:**
-One AI brain, any vendor, any scale. The prototype uses Gemini API for fleet intelligence, A-star pathfinding, and real-time streaming — built in about 6 hours. The production path is Gemini Robotics-ER 1.5, available now in preview. Four capabilities we need: task decomposition — breaking orders into robot subtasks. Spatial understanding — reading the warehouse and predicting congestion. Function calling — we define each vendor's robot API as callable functions, ER 1.5 orchestrates them. That's how vendor-agnostic works at the API level. And temporal reasoning — why did throughput drop after 2pm? That's physical intelligence. Rules can't do that.
+Let me explain what we built and where it goes. The hackathon demo — built in about 6 hours — uses the Gemini API for fleet intelligence analysis, A-star pathfinding, and real-time WebSocket streaming. It proves the orchestration logic works. The production path goes through DeepMind's Gemini Robotics-ER 1.5 — the vision-language model designed for physical agents, available right now through the Gemini API. ER 1.5 does four things FleetMind needs. Task decomposition: breaking "fulfill this order" into subtasks across multiple robots. Spatial understanding: reading the physical warehouse and predicting bottlenecks. Function calling: we define each robot vendor's API as callable functions, and ER 1.5 orchestrates them — that's how vendor-agnostic actually works at the API level. And temporal reasoning: understanding cause-and-effect over time. Why did throughput drop? Which charging schedule prevents the 4pm jam? That's the physical intelligence layer that rules-based systems can't do.
 
 ---
 
-### SLIDE 4 — LIVE DEMO (~90 sec)
+### SLIDE 4 — LIVE DEMO
 
 **On slide:**
-- LIVE — http://149.28.198.127
-- Built in ~6 hours | 12 robots | Gemini AI | collision avoidance | battery-aware
+- Live Demo — http://149.28.198.127
+- Built in ~6 hours for this hackathon
+- 12 robots | A* pathfinding | collision avoidance | Gemini AI insight | battery-aware scheduling
 
 **Speaker notes:**
-This is live on a cloud VM right now. *(show screen)* 12 robots, real-time. Watch — collision avoidance, they re-route around each other. *(click Add Task)* Priority dispatch picks the nearest robot, path lights up. *(click AI Insight)* Gemini analyzing fleet patterns. *(point to cost counter)* 48 cents saved per optimized pick — real number, based on industry semi-automated baselines. *(click E-Stop)* Everything halts. Tasks re-queue. Battery-aware too — low robots auto-charge. Built in 6 hours.
+Let me show you. This is live right now on a cloud VM — built in about 6 hours. 12-robot warehouse, real-time WebSocket streaming. Watch the robots — A-star pathfinding with dynamic collision avoidance, they re-route around each other in real-time. Let me add a task — priority-based dispatch assigns the nearest available robot instantly. See the path light up from pickup to dropoff. Now the AI insight — Gemini analyzing fleet patterns and giving operational recommendations. See the cost counter — every completed pick saves 48 cents in routing optimization versus semi-automated baselines. That's based on real industry data: manual picks cost $3.18 B2C, semi-automated $0.45 to $0.75. Our optimization layer squeezes another 48 cents out. And E-Stop — every robot halts instantly. In-flight tasks re-queue. Battery-aware scheduling — low battery robots auto-route to charge before they strand mid-task.
 
 ---
 
-### SLIDE 5 — WHY US (~50 sec)
+### SLIDE 5 — WHY US
 
 **On slide:**
-- Ivan: 59 AI agents | 0 employees | six-figure ARR | 7M company DB | patented methodology
-- Attila: hardware engineer | 8-figure exit (AI hardware team) | CES Best Startup | Red Dot Award
-- Together: Microsoft & ElevenLabs partnerships | Plug & Play, Antler, 500 Global | 7 exits
-- "We orchestrate autonomous agents at scale. This is the same problem — different layer."
+- "We orchestrate autonomous agents at scale. This is the same problem."
+- Ivan: 59 AI agents | 0 employees | six-figure ARR | 7M company database | patented methodology
+- Attila: hardware engineer | 8-figure exit (AI team) | CES Best Startup | Red Dot Award
+- Markster: Microsoft & ElevenLabs partnerships | Plug & Play, Antler, 500 Global | 7 exits
 
 **Speaker notes:**
-I run 59 AI agents with zero employees, six-figure revenue. Every day I solve routing, prioritization, collision avoidance, resource management — for AI agents. Attila exited his AI hardware team for eight figures. CES Best Startup, Red Dot Award. He builds the physical things, I orchestrate them. Seven exits between us. This demo exists because fleet orchestration is what we already do.
+Why us. I run Markster — 59 autonomous AI agents, zero employees, six-figure revenue. Every day I solve the exact same problem FleetMind solves: routing, prioritization, collision avoidance, resource management — for AI agents instead of physical robots. Attila is a hardware engineer — exited his AI hardware team for eight figures, won CES Best Startup and the Red Dot Design Award. He builds the physical things, I orchestrate them. Together: partnerships with Microsoft and ElevenLabs, 7 million company database, accelerated by Plug & Play, Antler, and 500 Global. Seven exits between us, patented methodology. This demo was built in 6 hours because fleet orchestration is literally what we do at a different layer.
 
 ---
 
-### SLIDE 6 — WHAT'S NEXT (~40 sec)
+### SLIDE 6 — WHAT'S NEXT
 
 **On slide:**
-- From 6-hour prototype → production fleet control
-- Next: Gemini Robotics-ER 1.5 → ROS2 bridge → vendor API connectors → real hardware
-- $150/robot/month SaaS | manual pick: $3.18 → semi-auto: $0.60 → FleetMind-optimized: $0.12
-- ~20,000 US warehousing businesses | mid-size segment underserved
-- http://149.28.198.127 | ivan@markster.ai | +1 212 718 1149
+- From 6-hour prototype to production fleet control.
+- Now: Working orchestration + Gemini AI intelligence + live dashboard
+- Next: Gemini Robotics-ER 1.5 integration → ROS2 bridge → Vendor API connectors → Real hardware telemetry
+- Target: ~4,000 mid-size US warehouses (10-100 robots) — $288M SAM (US), ~$1B global
+- $150/robot/month SaaS — every optimized pick saves $0.48 vs semi-automated baseline
+- Live demo: http://149.28.198.127
+- ivan@markster.ai | +1 212 718 1149
 
 **Speaker notes:**
-Next step: ER 1.5 integration, then ROS2 bridge to real hardware. $150 per robot per month. Manual picks cost $3.18. Semi-automated gets it to 60 cents. Our intelligence layer pushes it to 12 cents. 20,000 warehousing businesses in the US, mid-size segment completely underserved. Demo is live. Thank you.
+From a 6-hour prototype to production fleet control. The immediate next step is Gemini Robotics-ER 1.5 integration — replacing rules-based dispatch with DeepMind's task decomposition and spatial reasoning. Then ROS2 hardware bridge, vendor API connectors, real telemetry. The market: about 4,000 mid-size US warehouses running 10 to 100 robots with no intelligence layer. At $150 per robot per month, that's $288 million in serviceable addressable market in the US alone, roughly a billion globally. Every optimized pick saves 48 cents versus the semi-automated baseline — that's real ROI from day one. Demo is live. Thank you.
 
 ---
 
