@@ -216,7 +216,15 @@ async def reset_sim():
 async def create_task(pickup_x: int = 2, pickup_y: int = 2, dropoff_x: int = 37, dropoff_y: int = 2, priority: str = "normal"):
     task = sim.add_manual_task(pickup_x, pickup_y, dropoff_x, dropoff_y, priority)
     if task:
-        return {"status": "created", "task_id": task.id}
+        return {
+            "status": "created",
+            "task_id": task.id,
+            "order_id": task.order_id,
+            "item": task.item_description,
+            "pickup": {"x": task.pickup.x, "y": task.pickup.y},
+            "dropoff": {"x": task.dropoff.x, "y": task.dropoff.y},
+            "priority": task.priority.value,
+        }
     return JSONResponse(status_code=400, content={"error": "Failed to create task"})
 
 

@@ -14,6 +14,9 @@ let animT = 0;           // 0..1 interpolation progress
 let lastStateTime = 0;   // when we last received a state update
 let dashOffset = 0;       // animated dashes
 
+// Task flash overlays — visual feedback when "Add Task" is clicked
+let taskFlashes = [];     // { pickup, dropoff, createdAt, orderId }
+
 // Colors
 const COLORS = {
     floor: '#0d0d0d',
@@ -209,6 +212,53 @@ function render() {
         for (const dz of grid.dropoff_zones || []) {
             ctx.fillStyle = '#aa44ff60';
             ctx.fillText('D', dz.x * cellSize + cellSize / 2, dz.y * cellSize + cellSize / 2);
+        }
+    }
+
+    // Task flash overlays — animated pickup→dropoff highlight when tasks are created
+    const now = performance.now();
+    taskFlashes = taskFlashes.filter(f => now - f.createdAt < 3000);
+    for (const flash of taskFlashes) {
+        const age = now - flash.createdAt;
+        const alpha = Math.max(0, 1 - age / 3000);
+        const px = flash.pickup.x * cellSize + cellSize / 2;
+        const py = flash.pickup.y * cellSize + cellSize / 2;
+        const dx = flash.dropoff.x * cellSize + cellSize / 2;
+        const dy = flash.dropoff.y * cellSize + cellSize / 2;
+
+        // Glowing line from pickup to dropoff
+        ctx.strokeStyle = `rgba(0,255,136,${alpha * 0.5})`;
+        ctx.lineWidth = 3;
+        ctx.setLineDash([6, 4]);
+        ctx.lineDashOffset = -dashOffset * 2;
+        ctx.beginPath();
+        ctx.moveTo(px, py);
+        ctx.lineTo(dx, dy);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.lineDashOffset = 0;
+
+        // Pulsing rings at pickup and dropoff
+        const ringSize = cellSize * 0.6 + Math.sin(age / 150) * cellSize * 0.2;
+        // Pickup ring (blue)
+        ctx.strokeStyle = `rgba(51,136,255,${alpha * 0.8})`;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(px, py, ringSize, 0, Math.PI * 2);
+        ctx.stroke();
+        // Dropoff ring (purple)
+        ctx.strokeStyle = `rgba(170,68,255,${alpha * 0.8})`;
+        ctx.beginPath();
+        ctx.arc(dx, dy, ringSize, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // Label
+        if (cellSize >= 12) {
+            ctx.font = `bold ${Math.max(9, cellSize * 0.35)}px ${getComputedStyle(document.body).fontFamily}`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'bottom';
+            ctx.fillStyle = `rgba(255,255,255,${alpha * 0.9})`;
+            ctx.fillText(flash.orderId, (px + dx) / 2, (py + dy) / 2 - 4);
         }
     }
 
@@ -412,6 +462,13 @@ function updateDashboard() {
 
     document.getElementById('m-distance').textContent = Math.round(metrics.total_distance);
 
+    // Cost savings estimate: $4.20 per automated task vs $12 manual pick (~65% saving)
+    const costEl = document.getElementById('m-cost');
+    if (costEl) {
+        const saved = (metrics.tasks_completed * 7.80).toFixed(0); // $12 manual - $4.20 automated = $7.80 saved per task
+        costEl.textContent = '$' + Number(saved).toLocaleString();
+    }
+
     // Pause / E-stop UI
     const paused = !!state.paused;
     const badge = document.getElementById('sim-badge');
@@ -494,7 +551,16 @@ async function addTask() {
         const res = await fetch('/api/tasks/create', { method: 'POST' });
         const data = await res.json();
         if (data && data.status === 'created') {
-            setActionStatus(`Task created: ${data.task_id}`, 'ok');
+            setActionStatus(`${data.order_id}: ${data.item} [${data.priority}]`, 'ok');
+            // Visual flash on canvas showing pickup→dropoff
+            if (data.pickup && data.dropoff) {
+                taskFlashes.push({
+                    pickup: data.pickup,
+                    dropoff: data.dropoff,
+                    createdAt: performance.now(),
+                    orderId: data.order_id || data.task_id,
+                });
+            }
         } else {
             setActionStatus('Task create failed', 'err');
         }

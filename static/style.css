@@ -222,7 +222,7 @@ body {
 /* Bottom metrics bar */
 .metrics-bar {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(7, 1fr);
     gap: 1px;
     background: var(--border);
     border-top: 1px solid var(--border);
@@ -470,14 +470,19 @@ body {
 
 .alert-dismiss:hover { color: var(--text-primary); }
 
-/* AI Insight bar */
+/* AI Insight panel — prominent */
 .ai-insight {
-    padding: 10px 12px;
-    background: var(--bg-card);
-    border-bottom: 1px solid var(--border);
+    padding: 12px;
+    background: linear-gradient(135deg, #0a1a10, #0d1a0d);
+    border-bottom: 1px solid var(--green-dim);
+    border-left: 3px solid var(--green);
+}
+
+.ai-insight .ai-header {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     gap: 8px;
+    margin-bottom: 6px;
 }
 
 .ai-insight .ai-badge {
@@ -492,10 +497,19 @@ body {
     border-radius: 4px;
 }
 
+.ai-insight .ai-label {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-muted);
+}
+
 .ai-insight .insight-text {
-    font-size: 11px;
+    font-size: 12px;
     color: var(--text-secondary);
-    line-height: 1.4;
+    line-height: 1.5;
+    min-height: 36px;
 }
 
 /* Controls */

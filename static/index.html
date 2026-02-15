@@ -92,6 +92,11 @@
                     <div class="sub" id="m-charging">0 charging</div>
                 </div>
                 <div class="metric-card">
+                    <div class="label">Cost Saved</div>
+                    <div class="value green" id="m-cost">$0</div>
+                    <div class="sub">vs manual ops</div>
+                </div>
+                <div class="metric-card">
                     <div class="label">Distance</div>
                     <div class="value" id="m-distance">0</div>
                     <div class="sub">total cells</div>
@@ -101,10 +106,13 @@
 
         <!-- Sidebar -->
         <div class="sidebar">
-            <!-- AI Insight -->
+            <!-- AI Insight — prominent panel -->
             <div class="ai-insight">
-                <span class="ai-badge">Gemini AI</span>
-                <span class="insight-text" id="ai-insight">Initializing fleet intelligence...</span>
+                <div class="ai-header">
+                    <span class="ai-badge">Gemini AI</span>
+                    <span class="ai-label">Fleet Intelligence</span>
+                </div>
+                <div class="insight-text" id="ai-insight">Initializing fleet intelligence...</div>
             </div>
 
             <!-- Controls -->
