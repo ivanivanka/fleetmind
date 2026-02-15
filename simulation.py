@@ -114,7 +114,8 @@ class WarehouseSimulation:
 
     def subscribe(self) -> asyncio.Queue:
         """Subscribe to simulation state updates."""
-        q: asyncio.Queue = asyncio.Queue(maxsize=50)
+        # Keep only the latest update per subscriber to avoid UI/backpressure deadlocks.
+        q: asyncio.Queue = asyncio.Queue(maxsize=1)
         self._subscribers.append(q)
         return q
 
@@ -123,14 +124,19 @@ class WarehouseSimulation:
             self._subscribers.remove(q)
 
     async def _broadcast(self, data: dict):
-        dead = []
-        for q in self._subscribers:
+        for q in list(self._subscribers):
             try:
                 q.put_nowait(data)
             except asyncio.QueueFull:
-                dead.append(q)
-        for q in dead:
-            self._subscribers.remove(q)
+                # Drop the stale update and replace with the latest state.
+                try:
+                    q.get_nowait()
+                except Exception:
+                    pass
+                try:
+                    q.put_nowait(data)
+                except Exception:
+                    pass
 
     def _is_walkable(self, x: int, y: int) -> bool:
         if 0 <= x < self.config.width and 0 <= y < self.config.height:

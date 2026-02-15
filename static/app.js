@@ -9,6 +9,7 @@ let selectedRobot = null;
 let startTime = Date.now();
 let cellSize = 20;
 let _actionTimer = null;
+let _renderTimer = null;
 
 // Colors
 const COLORS = {
@@ -50,8 +51,15 @@ function connect() {
         const data = JSON.parse(e.data);
         if (data.type === 'state_update') {
             state = data;
-            render();
-            updateDashboard();
+
+            // Throttle rendering to avoid UI stalls on slower machines.
+            if (!_renderTimer) {
+                _renderTimer = setTimeout(() => {
+                    _renderTimer = null;
+                    render();
+                    updateDashboard();
+                }, 100); // ~10 fps
+            }
         }
     };
 
