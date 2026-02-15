@@ -108,12 +108,6 @@ docker run -p 8000:8000 -e GEMINI_API_KEY=your-key fleetmind
 - **Frontend**: HTML5 Canvas + vanilla JavaScript
 - **Deployment**: Docker on Vultr VM
 
-## Built for lablab.ai Hackathon
-
-Track 1: Autonomous Robotics Control in Simulation
-
-Team: Markster FleetMind (Ivan @ Markster)
-
 ## License
 
 MIT
