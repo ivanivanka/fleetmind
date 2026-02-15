@@ -96,7 +96,7 @@ function resizeCanvas() {
     const gridW = state.grid.width;
     const gridH = state.grid.height;
 
-    cellSize = Math.min(Math.floor(maxW / gridW), Math.floor(maxH / gridH), 24);
+    cellSize = Math.min(Math.floor(maxW / gridW), Math.floor(maxH / gridH));
     cellSize = Math.max(cellSize, 10);
 
     canvas.width = gridW * cellSize;
@@ -459,8 +459,6 @@ function updateDashboard() {
     battEl.textContent = batt + '%';
     battEl.className = 'value ' + (batt > 50 ? 'green' : batt > 25 ? 'yellow' : 'red');
     document.getElementById('m-charging').textContent = `${metrics.robots_charging} charging`;
-
-    document.getElementById('m-distance').textContent = Math.round(metrics.total_distance);
 
     // Cost savings estimate: $4.20 per automated task vs $12 manual pick (~65% saving)
     const costEl = document.getElementById('m-cost');
