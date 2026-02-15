@@ -254,9 +254,19 @@ class WarehouseSimulation:
             and r.battery > self.config.low_battery_threshold
         ]
 
+        # Track cells already targeted by active robots to prevent pile-ups
+        claimed_cells: set[tuple[int, int]] = set()
+        for r in self.robots.values():
+            if r.target and r.state not in (RobotState.IDLE, RobotState.ERROR):
+                claimed_cells.add((r.target.x, r.target.y))
+
         for task in queued:
             if not idle_robots:
                 break
+            # Skip if another robot is already heading to this pickup cell
+            pickup_key = (task.pickup.x, task.pickup.y)
+            if pickup_key in claimed_cells:
+                continue
             # Find nearest idle robot
             best = min(idle_robots, key=lambda r: r.position.distance_to(task.pickup))
             path = self._find_path(best.position, task.pickup)
@@ -269,6 +279,7 @@ class WarehouseSimulation:
                 task.assigned_robot_id = best.id
                 task.started_at = time.time()
                 idle_robots.remove(best)
+                claimed_cells.add(pickup_key)
 
     def _check_battery(self):
         """Send low-battery robots to charge."""
@@ -414,6 +425,24 @@ class WarehouseSimulation:
                 new_path = self._find_path(r.position, r.target)
                 if new_path:
                     r.path = new_path
+
+        # Phase 2c: safety net — separate any robots sharing a cell
+        seen_positions: dict[tuple[int, int], str] = {}
+        for r in self.robots.values():
+            key = (r.position.x, r.position.y)
+            if key in seen_positions:
+                # Collision! Push this robot to nearest open neighbor
+                for dx, dy in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
+                    nx, ny = r.position.x + dx, r.position.y + dy
+                    nkey = (nx, ny)
+                    if self._is_walkable(nx, ny) and nkey not in seen_positions:
+                        r.position = Position(x=nx, y=ny)
+                        if r.target:
+                            r.path = self._find_path(r.position, r.target)
+                        seen_positions[nkey] = r.id
+                        break
+            else:
+                seen_positions[key] = r.id
 
         # Phase 3: state transitions and task state machine
         for robot in self.robots.values():

@@ -249,11 +249,39 @@ function render() {
         }
     }
 
-    // Robots — smooth interpolated positions, rounded rectangle shape
+    // Robots — compute interpolated positions first, then separate overlaps
+    const robotScreenPos = {};
     for (const robot of robots) {
         const prev = prevPositions[robot.id] || { x: robot.x, y: robot.y };
-        const rx = lerp(prev.x, robot.x, animT) * cellSize + cellSize / 2;
-        const ry = lerp(prev.y, robot.y, animT) * cellSize + cellSize / 2;
+        robotScreenPos[robot.id] = {
+            x: lerp(prev.x, robot.x, animT) * cellSize + cellSize / 2,
+            y: lerp(prev.y, robot.y, animT) * cellSize + cellSize / 2,
+        };
+    }
+    // Push apart any robots that are visually too close
+    const minDist = cellSize * 0.75;
+    for (let i = 0; i < robots.length; i++) {
+        for (let j = i + 1; j < robots.length; j++) {
+            const a = robotScreenPos[robots[i].id];
+            const b = robotScreenPos[robots[j].id];
+            const dx = b.x - a.x;
+            const dy = b.y - a.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < minDist && dist > 0.1) {
+                const overlap = (minDist - dist) / 2;
+                const nx = dx / dist;
+                const ny = dy / dist;
+                a.x -= nx * overlap;
+                a.y -= ny * overlap;
+                b.x += nx * overlap;
+                b.y += ny * overlap;
+            }
+        }
+    }
+
+    for (const robot of robots) {
+        const rx = robotScreenPos[robot.id].x;
+        const ry = robotScreenPos[robot.id].y;
         const size = cellSize * 0.72;
         const half = size / 2;
         const color = COLORS.robot[robot.state] || '#555';
