@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - FleetMind AI</title>
+    <link rel="stylesheet" href="/static/platform/platform.css">
+</head>
+<body>
+    <div class="platform-layout">
+        <!-- Sidebar -->
+        <nav class="platform-sidebar">
+            <div class="sidebar-logo">
+                <div class="logo-mark">
+                    <svg viewBox="0 0 32 32" fill="none">
+                        <rect x="2" y="2" width="28" height="28" rx="6" stroke="#00cc44" stroke-width="2"/>
+                        <circle cx="11" cy="13" r="3" fill="#00cc44"/>
+                        <circle cx="21" cy="13" r="3" fill="#00cc44" opacity="0.6"/>
+                        <circle cx="16" cy="22" r="3" fill="#00cc44" opacity="0.3"/>
+                        <line x1="11" y1="13" x2="21" y2="13" stroke="#00cc44" stroke-width="1" opacity="0.4"/>
+                        <line x1="11" y1="13" x2="16" y2="22" stroke="#00cc44" stroke-width="1" opacity="0.4"/>
+                        <line x1="21" y1="13" x2="16" y2="22" stroke="#00cc44" stroke-width="1" opacity="0.4"/>
+                    </svg>
+                    <span>Fleet<span class="logo-accent">Mind</span></span>
+                </div>
+                <div class="logo-sub">Operations Platform</div>
+            </div>
+            <div class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-label">Overview</div>
+                    <a href="/platform/dashboard" class="nav-item active">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                        Dashboard
+                    </a>
+                    <a href="/" class="nav-item" target="_blank">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+                        Live Fleet View
+                    </a>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-section-label">Management</div>
+                    <a href="/platform/fleet" class="nav-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="8" cy="18" r="2"/><circle cx="16" cy="18" r="2"/><path d="M2 12h20"/></svg>
+                        Fleet
+                    </a>
+                    <a href="/platform/warehouses" class="nav-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21V8l9-5 9 5v13"/><path d="M9 21V14h6v7"/></svg>
+                        Warehouses
+                    </a>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-section-label">Intelligence</div>
+                    <a href="/platform/analytics" class="nav-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+                        Analytics
+                    </a>
+                    <a href="/platform/insights" class="nav-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7z"/><path d="M9 21h6M10 17v4M14 17v4"/></svg>
+                        AI Insights
+                        <span class="badge">3</span>
+                    </a>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-section-label">System</div>
+                    <a href="/platform/settings" class="nav-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                        Settings
+                    </a>
+                </div>
+            </div>
+            <div class="sidebar-footer">
+                <div class="sidebar-user">
+                    <div class="user-avatar">II</div>
+                    <div class="user-info">
+                        <div class="user-name">Ivan Ivanka</div>
+                        <div class="user-role">Admin</div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="platform-main">
+            <div class="page-header">
+                <div class="page-header-actions">
+                    <div>
+                        <h1>Dashboard</h1>
+                        <div class="page-subtitle">Fleet operations overview &middot; Last updated: just now</div>
+                    </div>
+                    <a href="/" target="_blank" class="btn primary">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4"/></svg>
+                        Open Live Fleet View
+                    </a>
+                </div>
+            </div>
+
+            <div class="page-content">
+                <!-- Overview Cards -->
+                <div class="overview-cards">
+                    <div class="overview-card">
+                        <div class="card-label">Total Robots</div>
+                        <div class="card-value green">47</div>
+                        <div class="card-trend up">+3 this month</div>
+                        <canvas id="spark-robots" class="mini-chart" style="height: 40px; width: 100%;"></canvas>
+                    </div>
+                    <div class="overview-card">
+                        <div class="card-label">Active Warehouses</div>
+                        <div class="card-value blue">3</div>
+                        <div class="card-trend neutral">Stable</div>
+                        <canvas id="spark-warehouses" class="mini-chart" style="height: 40px; width: 100%;"></canvas>
+                    </div>
+                    <div class="overview-card">
+                        <div class="card-label">Tasks Today</div>
+                        <div class="card-value" style="color: var(--text-primary);">1,247</div>
+                        <div class="card-trend up">+12% vs yesterday</div>
+                        <canvas id="spark-tasks" class="mini-chart" style="height: 40px; width: 100%;"></canvas>
+                    </div>
+                    <div class="overview-card">
+                        <div class="card-label">Fleet Uptime</div>
+                        <div class="card-value green">99.7%</div>
+                        <div class="card-trend up">+0.2% vs last week</div>
+                        <canvas id="spark-uptime" class="mini-chart" style="height: 40px; width: 100%;"></canvas>
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <!-- Recent Alerts -->
+                    <div class="section-panel">
+                        <div class="panel-header">
+                            <h2>Recent Alerts</h2>
+                            <span style="font-size: 11px; color: var(--text-muted);">4 unresolved</span>
+                        </div>
+                        <div class="panel-body">
+                            <div class="alert-list-item">
+                                <div class="alert-dot critical"></div>
+                                <div class="alert-msg"><strong>R-08 battery degradation</strong> &mdash; MiR250 unit showing accelerated discharge rate. Predicted failure in 12 days.</div>
+                                <div class="alert-time">2m ago</div>
+                            </div>
+                            <div class="alert-list-item">
+                                <div class="alert-dot warning"></div>
+                                <div class="alert-msg"><strong>Zone C charging bottleneck</strong> &mdash; 4 robots queued simultaneously at Station C-2. Consider load balancing.</div>
+                                <div class="alert-time">14m ago</div>
+                            </div>
+                            <div class="alert-list-item">
+                                <div class="alert-dot warning"></div>
+                                <div class="alert-msg"><strong>Throughput dip detected</strong> &mdash; Thursday afternoon throughput dropped 18% below trailing 7-day average.</div>
+                                <div class="alert-time">1h ago</div>
+                            </div>
+                            <div class="alert-list-item">
+                                <div class="alert-dot info"></div>
+                                <div class="alert-msg"><strong>R-31 firmware update available</strong> &mdash; Locus Origin unit eligible for v4.2.1 navigation patch.</div>
+                                <div class="alert-time">3h ago</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Stats -->
+                    <div class="section-panel">
+                        <div class="panel-header">
+                            <h2>Today's Performance</h2>
+                            <span style="font-size: 11px; color: var(--text-muted);">Feb 15, 2026</span>
+                        </div>
+                        <div class="panel-body">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                                <div class="metric-block">
+                                    <div class="metric-label">Avg Picks / Hour</div>
+                                    <div class="metric-value" style="color: var(--green);">142</div>
+                                    <div class="metric-change positive">+8% vs last week</div>
+                                </div>
+                                <div class="metric-block">
+                                    <div class="metric-label">Cost Per Pick</div>
+                                    <div class="metric-value" style="color: var(--green);">$0.14</div>
+                                    <div class="metric-change positive">-5% vs last week</div>
+                                </div>
+                                <div class="metric-block">
+                                    <div class="metric-label">Fleet Utilization</div>
+                                    <div class="metric-value" style="color: var(--blue);">84%</div>
+                                    <div class="metric-change positive">+2% vs last week</div>
+                                </div>
+                                <div class="metric-block">
+                                    <div class="metric-label">Error Rate</div>
+                                    <div class="metric-value" style="color: var(--green);">0.3%</div>
+                                    <div class="metric-change positive">-0.1% vs last week</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Throughput Chart -->
+                <div class="section-panel">
+                    <div class="panel-header">
+                        <h2>Throughput (Last 7 Days)</h2>
+                        <div class="date-range">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                            Feb 8 - Feb 15, 2026
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="chart-container" style="height: 200px;">
+                            <canvas id="chart-throughput" style="width: 100%; height: 200px;"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/static/platform/platform.js"></script>
+    <script>
+        // Sparklines
+        drawSparkline('spark-robots', [38, 40, 41, 42, 44, 44, 47], '#00cc44');
+        drawSparkline('spark-warehouses', [3, 3, 3, 3, 3, 3, 3], '#3388ff');
+        drawSparkline('spark-tasks', [980, 1050, 1100, 1180, 1090, 1200, 1247], '#e8e8e8');
+        drawSparkline('spark-uptime', [99.2, 99.4, 99.5, 99.3, 99.6, 99.5, 99.7], '#00cc44');
+
+        // Throughput chart
+        drawLineChart('chart-throughput', [
+            { data: [1180, 1210, 1150, 1290, 1050, 1200, 1247], color: '#00cc44', fill: true }
+        ], ['Feb 9', 'Feb 10', 'Feb 11', 'Feb 12', 'Feb 13', 'Feb 14', 'Feb 15'], {
+            yFormat: v => v.toFixed(0)
+        });
+    </script>
+</body>
+</html>

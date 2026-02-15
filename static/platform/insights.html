@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Insights - FleetMind AI</title>
+    <link rel="stylesheet" href="/static/platform/platform.css">
+</head>
+<body>
+    <div class="platform-layout">
+        <nav class="platform-sidebar">
+            <div class="sidebar-logo">
+                <div class="logo-mark">
+                    <svg viewBox="0 0 32 32" fill="none"><rect x="2" y="2" width="28" height="28" rx="6" stroke="#00cc44" stroke-width="2"/><circle cx="11" cy="13" r="3" fill="#00cc44"/><circle cx="21" cy="13" r="3" fill="#00cc44" opacity="0.6"/><circle cx="16" cy="22" r="3" fill="#00cc44" opacity="0.3"/><line x1="11" y1="13" x2="21" y2="13" stroke="#00cc44" stroke-width="1" opacity="0.4"/><line x1="11" y1="13" x2="16" y2="22" stroke="#00cc44" stroke-width="1" opacity="0.4"/><line x1="21" y1="13" x2="16" y2="22" stroke="#00cc44" stroke-width="1" opacity="0.4"/></svg>
+                    <span>Fleet<span class="logo-accent">Mind</span></span>
+                </div>
+                <div class="logo-sub">Operations Platform</div>
+            </div>
+            <div class="sidebar-nav">
+                <div class="nav-section"><div class="nav-section-label">Overview</div><a href="/platform/dashboard" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</a><a href="/" class="nav-item" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4"/></svg>Live Fleet View</a></div>
+                <div class="nav-section"><div class="nav-section-label">Management</div><a href="/platform/fleet" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="8" cy="18" r="2"/><circle cx="16" cy="18" r="2"/><path d="M2 12h20"/></svg>Fleet</a><a href="/platform/warehouses" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21V8l9-5 9 5v13"/><path d="M9 21V14h6v7"/></svg>Warehouses</a></div>
+                <div class="nav-section"><div class="nav-section-label">Intelligence</div><a href="/platform/analytics" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>Analytics</a><a href="/platform/insights" class="nav-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7z"/><path d="M9 21h6"/></svg>AI Insights<span class="badge">3</span></a></div>
+                <div class="nav-section"><div class="nav-section-label">System</div><a href="/platform/settings" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings</a></div>
+            </div>
+            <div class="sidebar-footer"><div class="sidebar-user"><div class="user-avatar">II</div><div class="user-info"><div class="user-name">Ivan Ivanka</div><div class="user-role">Admin</div></div></div></div>
+        </nav>
+
+        <main class="platform-main">
+            <div class="page-header">
+                <div class="page-header-actions">
+                    <div>
+                        <h1>AI Insights</h1>
+                        <div class="page-subtitle">Intelligent recommendations powered by Gemini Robotics</div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <span style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--green);">
+                            <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--green); display: inline-block; animation: pulse 2s infinite;"></span>
+                            AI Engine Active
+                        </span>
+                        <button class="btn sm">Refresh Insights</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="page-content">
+                <!-- Summary bar -->
+                <div style="display: flex; gap: 12px; margin-bottom: 24px;">
+                    <div style="flex: 1; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; display: flex; align-items: center; gap: 12px;">
+                        <div style="width: 40px; height: 40px; border-radius: 8px; background: var(--red-dim); display: flex; align-items: center; justify-content: center;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff3344" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                        </div>
+                        <div>
+                            <div style="font-size: 20px; font-weight: 700; font-family: var(--font-mono); color: var(--red);">1</div>
+                            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Critical</div>
+                        </div>
+                    </div>
+                    <div style="flex: 1; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; display: flex; align-items: center; gap: 12px;">
+                        <div style="width: 40px; height: 40px; border-radius: 8px; background: var(--yellow-dim); display: flex; align-items: center; justify-content: center;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffaa00" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        </div>
+                        <div>
+                            <div style="font-size: 20px; font-weight: 700; font-family: var(--font-mono); color: var(--yellow);">1</div>
+                            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Warning</div>
+                        </div>
+                    </div>
+                    <div style="flex: 1; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; display: flex; align-items: center; gap: 12px;">
+                        <div style="width: 40px; height: 40px; border-radius: 8px; background: var(--blue-dim); display: flex; align-items: center; justify-content: center;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3388ff" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                        </div>
+                        <div>
+                            <div style="font-size: 20px; font-weight: 700; font-family: var(--font-mono); color: var(--blue);">1</div>
+                            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Optimization</div>
+                        </div>
+                    </div>
+                    <div style="flex: 1; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; display: flex; align-items: center; gap: 12px;">
+                        <div style="width: 40px; height: 40px; border-radius: 8px; background: var(--green-dim); display: flex; align-items: center; justify-content: center;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00cc44" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                        </div>
+                        <div>
+                            <div style="font-size: 20px; font-weight: 700; font-family: var(--font-mono); color: var(--green);">12</div>
+                            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Resolved (30d)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Insight Cards -->
+                <div class="insight-card" style="border-left-color: var(--red);">
+                    <div class="insight-header">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span class="severity high">Critical</span>
+                            <span class="insight-title">Predictive Maintenance Alert</span>
+                        </div>
+                        <span style="font-size: 11px; color: var(--text-muted); font-family: var(--font-mono);">2 min ago</span>
+                    </div>
+                    <div class="insight-body">
+                        <p style="margin-bottom: 12px;">MiR250 unit <strong style="color: var(--text-primary);">R-08</strong> in SF Distribution Center is showing accelerated battery degradation. Discharge rate has increased 34% over the past 72 hours compared to fleet baseline.</p>
+                        <p style="margin-bottom: 12px;">Current battery health: <strong style="color: var(--red);">67%</strong> (fleet average: 91%). Estimated time to failure: <strong style="color: var(--red);">12 days</strong>.</p>
+                        <div style="background: var(--bg-secondary); border-radius: 6px; padding: 12px; margin-top: 8px;">
+                            <div style="font-size: 12px; font-weight: 600; color: var(--text-primary); margin-bottom: 6px;">Recommended Action:</div>
+                            <p style="font-size: 12px; color: var(--text-secondary);">Schedule battery replacement for R-08 within the next 7 days. Estimated downtime: 2 hours. Parts cost: ~$340. Proactive replacement avoids unplanned 8-hour emergency repair ($1,200+).</p>
+                        </div>
+                    </div>
+                    <div class="insight-footer">
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn sm primary">Accept Recommendation</button>
+                            <button class="btn sm">Dismiss</button>
+                        </div>
+                        <span class="powered-by">Powered by Gemini Robotics-ER 1.5</span>
+                    </div>
+                </div>
+
+                <div class="insight-card" style="border-left-color: var(--yellow);">
+                    <div class="insight-header">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span class="severity medium">Warning</span>
+                            <span class="insight-title">Throughput Anomaly Detected</span>
+                        </div>
+                        <span style="font-size: 11px; color: var(--text-muted); font-family: var(--font-mono);">1h ago</span>
+                    </div>
+                    <div class="insight-body">
+                        <p style="margin-bottom: 12px;">Thursday afternoon throughput at SF Distribution Center dropped <strong style="color: var(--yellow);">18%</strong> vs trailing 7-day average (119 picks/hr vs 145 picks/hr). Duration: 14:00-16:30 PST.</p>
+                        <p style="margin-bottom: 12px;">Root cause analysis identified <strong style="color: var(--text-primary);">Zone C charging station bottleneck</strong>. 4 robots queued simultaneously at Station C-2, creating a cascade delay. Robots R-14, R-19, R-22, and R-31 experienced 23-minute average wait times.</p>
+                        <div style="background: var(--bg-secondary); border-radius: 6px; padding: 12px; margin-top: 8px;">
+                            <div style="font-size: 12px; font-weight: 600; color: var(--text-primary); margin-bottom: 6px;">Recommended Action:</div>
+                            <p style="font-size: 12px; color: var(--text-secondary);">Implement staggered charging schedules for Zone C robots. Distribute afternoon charging across 13:00-17:00 window with 30-minute offsets. Expected throughput recovery: +15% during affected hours.</p>
+                        </div>
+                    </div>
+                    <div class="insight-footer">
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn sm primary">Apply Schedule</button>
+                            <button class="btn sm">Dismiss</button>
+                        </div>
+                        <span class="powered-by">Powered by Gemini Robotics-ER 1.5</span>
+                    </div>
+                </div>
+
+                <div class="insight-card" style="border-left-color: var(--blue);">
+                    <div class="insight-header">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span class="severity low">Optimization</span>
+                            <span class="insight-title">Fleet Rebalancing Opportunity</span>
+                        </div>
+                        <span style="font-size: 11px; color: var(--text-muted); font-family: var(--font-mono);">3h ago</span>
+                    </div>
+                    <div class="insight-body">
+                        <p style="margin-bottom: 12px;">Analysis of the last 14 days shows robots <strong style="color: var(--text-primary);">R-12</strong> and <strong style="color: var(--text-primary);">R-23</strong> in Zone B (Packing) at SF Distribution Center have <strong style="color: var(--blue);">23% idle time</strong> between 14:00-16:00 daily.</p>
+                        <p style="margin-bottom: 12px;">Meanwhile, Zone D (Staging) is consistently at <strong style="color: var(--yellow);">94% capacity</strong> during the same window, with an average task queue depth of 8.3 items.</p>
+                        <div style="background: var(--bg-secondary); border-radius: 6px; padding: 12px; margin-top: 8px;">
+                            <div style="font-size: 12px; font-weight: 600; color: var(--text-primary); margin-bottom: 6px;">Recommended Action:</div>
+                            <p style="font-size: 12px; color: var(--text-secondary);">Dynamically reassign R-12 and R-23 to Zone D between 14:00-16:00. Projected impact: +11% Zone D throughput, -2% Zone B throughput (within acceptable SLA). Net fleet utilization improvement: +3.2%.</p>
+                        </div>
+                    </div>
+                    <div class="insight-footer">
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn sm primary">Enable Auto-Rebalance</button>
+                            <button class="btn sm">Dismiss</button>
+                        </div>
+                        <span class="powered-by">Powered by Gemini Robotics-ER 1.5</span>
+                    </div>
+                </div>
+
+                <!-- Model info -->
+                <div style="margin-top: 24px; padding: 20px; background: linear-gradient(135deg, #0a1a10, #0d1a0d); border: 1px solid var(--green-dim); border-radius: 8px;">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                        <div style="font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--green); background: var(--green-dim); padding: 3px 8px; border-radius: 4px;">AI Engine</div>
+                        <span style="font-size: 14px; font-weight: 600;">Gemini Robotics-ER 1.5</span>
+                    </div>
+                    <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 12px;">FleetMind's AI insight engine uses Google's Gemini Robotics-ER (Extended Reasoning) 1.5 model, fine-tuned on 2.4M warehouse robotics operational records. The model analyzes real-time telemetry, historical patterns, and environmental factors to generate actionable recommendations.</p>
+                    <div style="display: flex; gap: 24px; font-size: 12px; color: var(--text-muted);">
+                        <span>Model version: <strong style="color: var(--text-secondary);">1.5.2-prod</strong></span>
+                        <span>Last retrained: <strong style="color: var(--text-secondary);">Feb 1, 2026</strong></span>
+                        <span>Accuracy (30d): <strong style="color: var(--green);">94.7%</strong></span>
+                        <span>Avg latency: <strong style="color: var(--text-secondary);">1.2s</strong></span>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/static/platform/platform.js"></script>
+    <style>
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+    </style>
+</body>
+</html>

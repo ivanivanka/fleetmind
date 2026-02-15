@@ -278,6 +278,27 @@ async def get_config():
     return JSONResponse(content=sim.config.model_dump())
 
 
+@app.get("/platform/{path:path}", response_class=HTMLResponse)
+async def platform_page(path: str = ""):
+    page_map = {
+        "": "dashboard",
+        "dashboard": "dashboard",
+        "login": "login",
+        "fleet": "fleet",
+        "warehouses": "warehouses",
+        "analytics": "analytics",
+        "insights": "insights",
+        "settings": "settings",
+    }
+    page = page_map.get(path, "dashboard")
+    file_path = f"static/platform/{page}.html"
+    try:
+        with open(file_path, "r") as f:
+            return HTMLResponse(content=f.read())
+    except FileNotFoundError:
+        return HTMLResponse(content="<h1>Page not found</h1>", status_code=404)
+
+
 if __name__ == "__main__":
     import uvicorn
     port = int(os.environ.get("PORT", "8000"))

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fleet Management - FleetMind AI</title>
+    <link rel="stylesheet" href="/static/platform/platform.css">
+</head>
+<body>
+    <div class="platform-layout">
+        <nav class="platform-sidebar">
+            <div class="sidebar-logo">
+                <div class="logo-mark">
+                    <svg viewBox="0 0 32 32" fill="none"><rect x="2" y="2" width="28" height="28" rx="6" stroke="#00cc44" stroke-width="2"/><circle cx="11" cy="13" r="3" fill="#00cc44"/><circle cx="21" cy="13" r="3" fill="#00cc44" opacity="0.6"/><circle cx="16" cy="22" r="3" fill="#00cc44" opacity="0.3"/><line x1="11" y1="13" x2="21" y2="13" stroke="#00cc44" stroke-width="1" opacity="0.4"/><line x1="11" y1="13" x2="16" y2="22" stroke="#00cc44" stroke-width="1" opacity="0.4"/><line x1="21" y1="13" x2="16" y2="22" stroke="#00cc44" stroke-width="1" opacity="0.4"/></svg>
+                    <span>Fleet<span class="logo-accent">Mind</span></span>
+                </div>
+                <div class="logo-sub">Operations Platform</div>
+            </div>
+            <div class="sidebar-nav">
+                <div class="nav-section"><div class="nav-section-label">Overview</div><a href="/platform/dashboard" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</a><a href="/" class="nav-item" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4"/></svg>Live Fleet View</a></div>
+                <div class="nav-section"><div class="nav-section-label">Management</div><a href="/platform/fleet" class="nav-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="8" cy="18" r="2"/><circle cx="16" cy="18" r="2"/><path d="M2 12h20"/></svg>Fleet</a><a href="/platform/warehouses" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21V8l9-5 9 5v13"/><path d="M9 21V14h6v7"/></svg>Warehouses</a></div>
+                <div class="nav-section"><div class="nav-section-label">Intelligence</div><a href="/platform/analytics" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>Analytics</a><a href="/platform/insights" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7z"/><path d="M9 21h6"/></svg>AI Insights<span class="badge">3</span></a></div>
+                <div class="nav-section"><div class="nav-section-label">System</div><a href="/platform/settings" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings</a></div>
+            </div>
+            <div class="sidebar-footer"><div class="sidebar-user"><div class="user-avatar">II</div><div class="user-info"><div class="user-name">Ivan Ivanka</div><div class="user-role">Admin</div></div></div></div>
+        </nav>
+
+        <main class="platform-main">
+            <div class="page-header">
+                <div class="page-header-actions">
+                    <div>
+                        <h1>Fleet Management</h1>
+                        <div class="page-subtitle">47 robots across 3 warehouses</div>
+                    </div>
+                    <div style="display: flex; gap: 12px; align-items: center;">
+                        <div class="search-bar">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                            <input type="text" placeholder="Search robots...">
+                        </div>
+                        <select class="form-input" style="width: 200px;" id="warehouse-filter" onchange="filterRobots()">
+                            <option value="all">All Warehouses</option>
+                            <option value="SF Distribution Center">SF Distribution Center</option>
+                            <option value="Oakland Fulfillment Hub">Oakland Fulfillment Hub</option>
+                            <option value="San Jose Returns Center">San Jose Returns Center</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="page-content">
+                <div class="section-panel">
+                    <div style="overflow-x: auto;">
+                        <table class="data-table" id="robot-table">
+                            <thead>
+                                <tr>
+                                    <th>Robot ID</th>
+                                    <th>Model</th>
+                                    <th>Warehouse</th>
+                                    <th>Status</th>
+                                    <th>Battery</th>
+                                    <th>Tasks Today</th>
+                                    <th>Last Seen</th>
+                                </tr>
+                            </thead>
+                            <tbody id="robot-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/static/platform/platform.js"></script>
+    <script>
+        const models = ['Locus Origin', 'MiR250', 'Fetch Freight'];
+        const warehouses = ['SF Distribution Center', 'Oakland Fulfillment Hub', 'San Jose Returns Center'];
+        const statuses = ['Active', 'Active', 'Active', 'Active', 'Idle', 'Idle', 'Charging', 'Maintenance'];
+        const whCounts = [20, 16, 11]; // robots per warehouse
+
+        function seededRandom(seed) {
+            let x = Math.sin(seed) * 10000;
+            return x - Math.floor(x);
+        }
+
+        const robots = [];
+        let robotNum = 1;
+        whCounts.forEach((count, whIdx) => {
+            for (let i = 0; i < count; i++) {
+                const id = 'R-' + String(robotNum).padStart(2, '0');
+                const seed = robotNum * 137;
+                const model = models[Math.floor(seededRandom(seed) * models.length)];
+                const status = statuses[Math.floor(seededRandom(seed + 1) * statuses.length)];
+                const battery = status === 'Charging' ? Math.floor(seededRandom(seed + 2) * 30 + 10) :
+                               status === 'Maintenance' ? Math.floor(seededRandom(seed + 2) * 40 + 20) :
+                               Math.floor(seededRandom(seed + 2) * 40 + 55);
+                const tasks = status === 'Maintenance' ? 0 : Math.floor(seededRandom(seed + 3) * 35 + 5);
+                const minsAgo = status === 'Active' ? Math.floor(seededRandom(seed + 4) * 2) :
+                               status === 'Maintenance' ? Math.floor(seededRandom(seed + 4) * 120 + 30) :
+                               Math.floor(seededRandom(seed + 4) * 15);
+
+                robots.push({
+                    id, model, warehouse: warehouses[whIdx], status, battery, tasks,
+                    lastSeen: minsAgo === 0 ? 'Just now' : minsAgo + 'm ago'
+                });
+                robotNum++;
+            }
+        });
+
+        function renderRobots(filter) {
+            const tbody = document.getElementById('robot-tbody');
+            const filtered = filter === 'all' ? robots : robots.filter(r => r.warehouse === filter);
+            tbody.innerHTML = filtered.map(r => {
+                const statusClass = r.status.toLowerCase();
+                const batteryColor = r.battery > 60 ? '#00cc44' : r.battery > 30 ? '#ffaa00' : '#ff3344';
+                return `<tr>
+                    <td><span class="mono" style="color: var(--text-primary); font-weight: 600;">${r.id}</span></td>
+                    <td>${r.model}</td>
+                    <td style="font-size: 12px;">${r.warehouse}</td>
+                    <td><span class="status ${statusClass}"><span class="dot"></span>${r.status}</span></td>
+                    <td>
+                        <span class="mono" style="color: ${batteryColor}">${r.battery}%</span>
+                        <span class="battery-bar-sm"><span class="fill" style="width: ${r.battery}%; background: ${batteryColor};"></span></span>
+                    </td>
+                    <td class="mono">${r.tasks}</td>
+                    <td style="color: var(--text-muted); font-size: 12px;">${r.lastSeen}</td>
+                </tr>`;
+            }).join('');
+        }
+
+        function filterRobots() {
+            renderRobots(document.getElementById('warehouse-filter').value);
+        }
+
+        renderRobots('all');
+    </script>
+</body>
+</html>

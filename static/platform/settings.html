@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - FleetMind AI</title>
+    <link rel="stylesheet" href="/static/platform/platform.css">
+</head>
+<body>
+    <div class="platform-layout">
+        <nav class="platform-sidebar">
+            <div class="sidebar-logo">
+                <div class="logo-mark">
+                    <svg viewBox="0 0 32 32" fill="none"><rect x="2" y="2" width="28" height="28" rx="6" stroke="#00cc44" stroke-width="2"/><circle cx="11" cy="13" r="3" fill="#00cc44"/><circle cx="21" cy="13" r="3" fill="#00cc44" opacity="0.6"/><circle cx="16" cy="22" r="3" fill="#00cc44" opacity="0.3"/><line x1="11" y1="13" x2="21" y2="13" stroke="#00cc44" stroke-width="1" opacity="0.4"/><line x1="11" y1="13" x2="16" y2="22" stroke="#00cc44" stroke-width="1" opacity="0.4"/><line x1="21" y1="13" x2="16" y2="22" stroke="#00cc44" stroke-width="1" opacity="0.4"/></svg>
+                    <span>Fleet<span class="logo-accent">Mind</span></span>
+                </div>
+                <div class="logo-sub">Operations Platform</div>
+            </div>
+            <div class="sidebar-nav">
+                <div class="nav-section"><div class="nav-section-label">Overview</div><a href="/platform/dashboard" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</a><a href="/" class="nav-item" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4"/></svg>Live Fleet View</a></div>
+                <div class="nav-section"><div class="nav-section-label">Management</div><a href="/platform/fleet" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="8" cy="18" r="2"/><circle cx="16" cy="18" r="2"/><path d="M2 12h20"/></svg>Fleet</a><a href="/platform/warehouses" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21V8l9-5 9 5v13"/><path d="M9 21V14h6v7"/></svg>Warehouses</a></div>
+                <div class="nav-section"><div class="nav-section-label">Intelligence</div><a href="/platform/analytics" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>Analytics</a><a href="/platform/insights" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7z"/><path d="M9 21h6"/></svg>AI Insights<span class="badge">3</span></a></div>
+                <div class="nav-section"><div class="nav-section-label">System</div><a href="/platform/settings" class="nav-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings</a></div>
+            </div>
+            <div class="sidebar-footer"><div class="sidebar-user"><div class="user-avatar">II</div><div class="user-info"><div class="user-name">Ivan Ivanka</div><div class="user-role">Admin</div></div></div></div>
+        </nav>
+
+        <main class="platform-main">
+            <div class="page-header">
+                <h1>Settings</h1>
+                <div class="page-subtitle">Platform configuration and team management</div>
+            </div>
+
+            <div class="page-content">
+                <div class="grid-2">
+                    <div>
+                        <!-- General -->
+                        <div class="section-panel">
+                            <div class="panel-header"><h2>General</h2></div>
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label class="form-label">Organization Name</label>
+                                    <input type="text" class="form-input" value="FleetMind AI (Demo)">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Primary Timezone</label>
+                                    <select class="form-input">
+                                        <option selected>America/Los_Angeles (PST/PDT)</option>
+                                        <option>America/New_York (EST/EDT)</option>
+                                        <option>America/Chicago (CST/CDT)</option>
+                                        <option>UTC</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Default Operating Hours</label>
+                                    <div style="display: flex; gap: 8px; align-items: center;">
+                                        <input type="text" class="form-input" value="06:00" style="width: 100px;">
+                                        <span style="color: var(--text-muted);">to</span>
+                                        <input type="text" class="form-input" value="22:00" style="width: 100px;">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Fleet Size Limit</label>
+                                    <input type="text" class="form-input" value="100 robots" disabled>
+                                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Contact sales to increase. Current: 47/100</div>
+                                </div>
+                                <button class="btn primary" style="margin-top: 8px;">Save Changes</button>
+                            </div>
+                        </div>
+
+                        <!-- Notifications -->
+                        <div class="section-panel">
+                            <div class="panel-header"><h2>Notifications</h2></div>
+                            <div class="panel-body">
+                                <div class="toggle-row">
+                                    <div class="toggle-label">
+                                        <span class="label-main">Email Alerts</span>
+                                        <span class="label-sub">Receive critical alerts via email</span>
+                                    </div>
+                                    <div class="toggle on"><div class="toggle-knob"></div></div>
+                                </div>
+                                <div class="toggle-row">
+                                    <div class="toggle-label">
+                                        <span class="label-main">Slack Integration</span>
+                                        <span class="label-sub">Post alerts to #fleet-ops channel</span>
+                                    </div>
+                                    <div class="toggle on"><div class="toggle-knob"></div></div>
+                                </div>
+                                <div class="toggle-row">
+                                    <div class="toggle-label">
+                                        <span class="label-main">SMS Alerts (Critical Only)</span>
+                                        <span class="label-sub">Text message for critical severity</span>
+                                    </div>
+                                    <div class="toggle"><div class="toggle-knob"></div></div>
+                                </div>
+                                <div class="toggle-row">
+                                    <div class="toggle-label">
+                                        <span class="label-main">Daily Digest</span>
+                                        <span class="label-sub">Summary email at 08:00 local time</span>
+                                    </div>
+                                    <div class="toggle on"><div class="toggle-knob"></div></div>
+                                </div>
+                                <div style="margin-top: 16px;">
+                                    <label class="form-label">Battery Alert Threshold</label>
+                                    <div style="display: flex; gap: 8px; align-items: center;">
+                                        <input type="text" class="form-input" value="20" style="width: 80px;">
+                                        <span style="color: var(--text-muted); font-size: 13px;">%</span>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 12px;">
+                                    <label class="form-label">Idle Time Alert Threshold</label>
+                                    <div style="display: flex; gap: 8px; align-items: center;">
+                                        <input type="text" class="form-input" value="15" style="width: 80px;">
+                                        <span style="color: var(--text-muted); font-size: 13px;">minutes</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <!-- Integrations -->
+                        <div class="section-panel">
+                            <div class="panel-header"><h2>Integrations</h2></div>
+                            <div class="panel-body">
+                                <div class="toggle-row">
+                                    <div class="toggle-label">
+                                        <span class="label-main">WMS Connection</span>
+                                        <span class="label-sub">Warehouse Management System sync &middot; Connected to SAP EWM</span>
+                                    </div>
+                                    <div class="toggle on"><div class="toggle-knob"></div></div>
+                                </div>
+                                <div class="toggle-row">
+                                    <div class="toggle-label">
+                                        <span class="label-main">ERP Sync</span>
+                                        <span class="label-sub">Enterprise resource planning data feed</span>
+                                    </div>
+                                    <div class="toggle"><div class="toggle-knob"></div></div>
+                                </div>
+                                <div class="toggle-row">
+                                    <div class="toggle-label">
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <span class="label-main">Gemini Robotics API</span>
+                                            <span style="font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; padding: 2px 6px; border-radius: 4px; background: var(--green-dim); color: var(--green);">Active</span>
+                                        </div>
+                                        <span class="label-sub" style="margin-top: 2px;">AI inference engine &middot; Key: <span style="font-family: var(--font-mono); font-size: 11px;">gm-rob-****-****-7f3a</span></span>
+                                    </div>
+                                    <div class="toggle on"><div class="toggle-knob"></div></div>
+                                </div>
+                                <div class="toggle-row">
+                                    <div class="toggle-label">
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <span class="label-main">ROS2 Bridge</span>
+                                            <span class="badge-soon">Coming Soon</span>
+                                        </div>
+                                        <span class="label-sub">Direct ROS2 topic integration for custom robots</span>
+                                    </div>
+                                    <div class="toggle" style="opacity: 0.4; pointer-events: none;"><div class="toggle-knob"></div></div>
+                                </div>
+                                <div class="toggle-row">
+                                    <div class="toggle-label">
+                                        <span class="label-main">Slack Workspace</span>
+                                        <span class="label-sub">Connected to FleetMind Ops workspace</span>
+                                    </div>
+                                    <div class="toggle on"><div class="toggle-knob"></div></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Team -->
+                        <div class="section-panel">
+                            <div class="panel-header">
+                                <h2>Team Members</h2>
+                                <button class="btn sm">Invite Member</button>
+                            </div>
+                            <div class="panel-body">
+                                <div class="team-member">
+                                    <div class="member-avatar" style="background: var(--green-dim); color: var(--green);">II</div>
+                                    <div class="member-info">
+                                        <div class="member-name">Ivan Ivanka</div>
+                                        <div class="member-email">ivan@fleetmind.ai</div>
+                                    </div>
+                                    <span class="member-role admin">Admin</span>
+                                </div>
+                                <div class="team-member">
+                                    <div class="member-avatar" style="background: var(--blue-dim); color: var(--blue);">AB</div>
+                                    <div class="member-info">
+                                        <div class="member-name">Attila Bartha</div>
+                                        <div class="member-email">attila@fleetmind.ai</div>
+                                    </div>
+                                    <span class="member-role engineer">Engineer</span>
+                                </div>
+                                <div class="team-member">
+                                    <div class="member-avatar" style="background: var(--yellow-dim); color: var(--yellow);">SC</div>
+                                    <div class="member-info">
+                                        <div class="member-name">Sarah Chen</div>
+                                        <div class="member-email">sarah@fleetmind.ai</div>
+                                    </div>
+                                    <span class="member-role manager">Ops Manager</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- API Access -->
+                        <div class="section-panel">
+                            <div class="panel-header"><h2>API Access</h2></div>
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label class="form-label">API Endpoint</label>
+                                    <input type="text" class="form-input" value="https://api.fleetmind.ai/v2" disabled style="font-family: var(--font-mono); font-size: 12px;">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">API Key</label>
+                                    <input type="text" class="form-input" value="fm_live_****************************3kx9" disabled style="font-family: var(--font-mono); font-size: 12px;">
+                                </div>
+                                <div style="font-size: 11px; color: var(--text-muted);">
+                                    Rate limit: 1,000 req/min &middot; Plan: Enterprise &middot; <a href="#" style="color: var(--green);">View API Docs</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Version info -->
+                <div style="margin-top: 16px; padding: 16px 20px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; display: flex; align-items: center; justify-content: space-between; font-size: 12px; color: var(--text-muted);">
+                    <span>FleetMind AI Platform v2.4.1 &middot; Build 2026.02.14-a8c3f1</span>
+                    <span>Runtime: Python 3.12 / FastAPI &middot; Inference: Gemini Robotics-ER 1.5</span>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/static/platform/platform.js"></script>
+</body>
+</html>

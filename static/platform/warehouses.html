@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warehouses - FleetMind AI</title>
+    <link rel="stylesheet" href="/static/platform/platform.css">
+</head>
+<body>
+    <div class="platform-layout">
+        <nav class="platform-sidebar">
+            <div class="sidebar-logo">
+                <div class="logo-mark">
+                    <svg viewBox="0 0 32 32" fill="none"><rect x="2" y="2" width="28" height="28" rx="6" stroke="#00cc44" stroke-width="2"/><circle cx="11" cy="13" r="3" fill="#00cc44"/><circle cx="21" cy="13" r="3" fill="#00cc44" opacity="0.6"/><circle cx="16" cy="22" r="3" fill="#00cc44" opacity="0.3"/><line x1="11" y1="13" x2="21" y2="13" stroke="#00cc44" stroke-width="1" opacity="0.4"/><line x1="11" y1="13" x2="16" y2="22" stroke="#00cc44" stroke-width="1" opacity="0.4"/><line x1="21" y1="13" x2="16" y2="22" stroke="#00cc44" stroke-width="1" opacity="0.4"/></svg>
+                    <span>Fleet<span class="logo-accent">Mind</span></span>
+                </div>
+                <div class="logo-sub">Operations Platform</div>
+            </div>
+            <div class="sidebar-nav">
+                <div class="nav-section"><div class="nav-section-label">Overview</div><a href="/platform/dashboard" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</a><a href="/" class="nav-item" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4"/></svg>Live Fleet View</a></div>
+                <div class="nav-section"><div class="nav-section-label">Management</div><a href="/platform/fleet" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="8" cy="18" r="2"/><circle cx="16" cy="18" r="2"/><path d="M2 12h20"/></svg>Fleet</a><a href="/platform/warehouses" class="nav-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21V8l9-5 9 5v13"/><path d="M9 21V14h6v7"/></svg>Warehouses</a></div>
+                <div class="nav-section"><div class="nav-section-label">Intelligence</div><a href="/platform/analytics" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>Analytics</a><a href="/platform/insights" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7z"/><path d="M9 21h6"/></svg>AI Insights<span class="badge">3</span></a></div>
+                <div class="nav-section"><div class="nav-section-label">System</div><a href="/platform/settings" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings</a></div>
+            </div>
+            <div class="sidebar-footer"><div class="sidebar-user"><div class="user-avatar">II</div><div class="user-info"><div class="user-name">Ivan Ivanka</div><div class="user-role">Admin</div></div></div></div>
+        </nav>
+
+        <main class="platform-main">
+            <div class="page-header">
+                <h1>Warehouse Setup</h1>
+                <div class="page-subtitle">3 active warehouse locations</div>
+            </div>
+
+            <div class="page-content">
+                <div class="grid-3" id="warehouse-cards">
+                    <!-- SF -->
+                    <div class="warehouse-card" onclick="showDetail(0)">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+                            <div class="wh-name">SF Distribution Center</div>
+                            <span class="status online"><span class="dot"></span>Online</span>
+                        </div>
+                        <div class="wh-address">1450 Mission St, San Francisco, CA 94103</div>
+                        <div class="wh-stats">
+                            <div class="wh-stat"><div class="stat-value" style="color: var(--green);">20</div><div class="stat-label">Robots</div></div>
+                            <div class="wh-stat"><div class="stat-value">6</div><div class="stat-label">Zones</div></div>
+                            <div class="wh-stat"><div class="stat-value">85,000</div><div class="stat-label">Sq Ft</div></div>
+                            <div class="wh-stat"><div class="stat-value" style="color: var(--blue);">524</div><div class="stat-label">Tasks Today</div></div>
+                        </div>
+                    </div>
+
+                    <!-- Oakland -->
+                    <div class="warehouse-card" onclick="showDetail(1)">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+                            <div class="wh-name">Oakland Fulfillment Hub</div>
+                            <span class="status online"><span class="dot"></span>Online</span>
+                        </div>
+                        <div class="wh-address">2100 Maritime St, Oakland, CA 94607</div>
+                        <div class="wh-stats">
+                            <div class="wh-stat"><div class="stat-value" style="color: var(--green);">16</div><div class="stat-label">Robots</div></div>
+                            <div class="wh-stat"><div class="stat-value">5</div><div class="stat-label">Zones</div></div>
+                            <div class="wh-stat"><div class="stat-value">62,000</div><div class="stat-label">Sq Ft</div></div>
+                            <div class="wh-stat"><div class="stat-value" style="color: var(--blue);">438</div><div class="stat-label">Tasks Today</div></div>
+                        </div>
+                    </div>
+
+                    <!-- San Jose -->
+                    <div class="warehouse-card" onclick="showDetail(2)">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+                            <div class="wh-name">San Jose Returns Center</div>
+                            <span class="status online"><span class="dot"></span>Online</span>
+                        </div>
+                        <div class="wh-address">750 Ridder Park Dr, San Jose, CA 95131</div>
+                        <div class="wh-stats">
+                            <div class="wh-stat"><div class="stat-value" style="color: var(--green);">11</div><div class="stat-label">Robots</div></div>
+                            <div class="wh-stat"><div class="stat-value">4</div><div class="stat-label">Zones</div></div>
+                            <div class="wh-stat"><div class="stat-value">41,000</div><div class="stat-label">Sq Ft</div></div>
+                            <div class="wh-stat"><div class="stat-value" style="color: var(--blue);">285</div><div class="stat-label">Tasks Today</div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detail Overlay -->
+                <div class="detail-overlay" id="detail-overlay" onclick="if(event.target===this)hideDetail()">
+                    <div class="detail-modal" id="detail-modal"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/static/platform/platform.js"></script>
+    <script>
+        const warehouseData = [
+            {
+                name: 'SF Distribution Center',
+                address: '1450 Mission St, San Francisco, CA 94103',
+                robots: 20, sqft: '85,000', zones: 6, tasksToday: 524,
+                operatingHours: '06:00 - 22:00 PST',
+                manager: 'Sarah Chen',
+                zones_detail: [
+                    { name: 'Zone A', type: 'Picking', robots: 8, status: 'Active' },
+                    { name: 'Zone B', type: 'Packing', robots: 5, status: 'Active' },
+                    { name: 'Zone C', type: 'Charging', robots: 3, status: 'Active' },
+                    { name: 'Zone D', type: 'Staging', robots: 2, status: 'Active' },
+                    { name: 'Zone E', type: 'Receiving', robots: 1, status: 'Active' },
+                    { name: 'Zone F', type: 'Returns', robots: 1, status: 'Low Traffic' },
+                ]
+            },
+            {
+                name: 'Oakland Fulfillment Hub',
+                address: '2100 Maritime St, Oakland, CA 94607',
+                robots: 16, sqft: '62,000', zones: 5, tasksToday: 438,
+                operatingHours: '05:00 - 23:00 PST',
+                manager: 'Attila Bartha',
+                zones_detail: [
+                    { name: 'Zone A', type: 'Picking', robots: 7, status: 'Active' },
+                    { name: 'Zone B', type: 'Packing', robots: 4, status: 'Active' },
+                    { name: 'Zone C', type: 'Charging', robots: 2, status: 'Active' },
+                    { name: 'Zone D', type: 'Staging', robots: 2, status: 'Active' },
+                    { name: 'Zone E', type: 'Receiving', robots: 1, status: 'Active' },
+                ]
+            },
+            {
+                name: 'San Jose Returns Center',
+                address: '750 Ridder Park Dr, San Jose, CA 95131',
+                robots: 11, sqft: '41,000', zones: 4, tasksToday: 285,
+                operatingHours: '07:00 - 21:00 PST',
+                manager: 'Sarah Chen',
+                zones_detail: [
+                    { name: 'Zone A', type: 'Returns Processing', robots: 5, status: 'Active' },
+                    { name: 'Zone B', type: 'Sorting', robots: 3, status: 'Active' },
+                    { name: 'Zone C', type: 'Charging', robots: 2, status: 'Active' },
+                    { name: 'Zone D', type: 'Staging', robots: 1, status: 'Low Traffic' },
+                ]
+            }
+        ];
+
+        function showDetail(idx) {
+            const wh = warehouseData[idx];
+            const modal = document.getElementById('detail-modal');
+            modal.innerHTML = `
+                <button class="modal-close" onclick="hideDetail()">&times;</button>
+                <h2 style="font-size: 20px; font-weight: 700; margin-bottom: 4px;">${wh.name}</h2>
+                <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 20px;">${wh.address}</p>
+
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px;">
+                    <div class="metric-block">
+                        <div class="metric-label">Robots</div>
+                        <div class="metric-value" style="font-size: 22px; color: var(--green);">${wh.robots}</div>
+                    </div>
+                    <div class="metric-block">
+                        <div class="metric-label">Floor Area</div>
+                        <div class="metric-value" style="font-size: 22px;">${wh.sqft}</div>
+                    </div>
+                    <div class="metric-block">
+                        <div class="metric-label">Tasks Today</div>
+                        <div class="metric-value" style="font-size: 22px; color: var(--blue);">${wh.tasksToday}</div>
+                    </div>
+                    <div class="metric-block">
+                        <div class="metric-label">Zones</div>
+                        <div class="metric-value" style="font-size: 22px;">${wh.zones}</div>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; font-size: 13px;">
+                    <div><span style="color: var(--text-muted);">Operating Hours:</span> <strong>${wh.operatingHours}</strong></div>
+                    <div><span style="color: var(--text-muted);">Site Manager:</span> <strong>${wh.manager}</strong></div>
+                </div>
+
+                <h3 style="font-size: 14px; font-weight: 600; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border);">Zone Configuration</h3>
+                <div class="zone-grid">
+                    ${wh.zones_detail.map(z => `
+                        <div class="zone-item">
+                            <div class="zone-name">${z.name}</div>
+                            <div class="zone-type">${z.type}</div>
+                            <div style="font-family: var(--font-mono); font-size: 16px; font-weight: 700; margin: 8px 0; color: var(--green);">${z.robots}</div>
+                            <div style="font-size: 10px; color: var(--text-muted);">robots</div>
+                            <div style="margin-top: 6px;"><span class="status ${z.status === 'Active' ? 'active' : 'idle'}" style="font-size: 9px;"><span class="dot"></span>${z.status}</span></div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            document.getElementById('detail-overlay').classList.add('show');
+        }
+
+        function hideDetail() {
+            document.getElementById('detail-overlay').classList.remove('show');
+        }
+
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') hideDetail(); });
+    </script>
+</body>
+</html>
