@@ -9,9 +9,9 @@ Built for warehouse ops teams who need to manage 10-100+ robots without hiring r
 - **2D Warehouse Simulation** - Configurable warehouse layouts with shelves, aisles, charging stations
 - **Autonomous Fleet Control** - A* pathfinding, collision avoidance, battery management
 - **Smart Task Routing** - Priority-based order assignment matching nearest available robots
-- **Gemini AI Integration** - Intelligent task prioritization and anomaly detection
+- **Gemini AI Integration (Optional)** - On-demand ops insights with a safe rules-based fallback (cached)
 - **Real-time Dashboard** - Live fleet status, task queues, metrics, alerts via WebSocket
-- **Operator Controls** - Manual task creation, emergency stop, alert management
+- **Operator Controls** - Manual task creation, E-stop (pause/resume), and **Reset Demo** (fresh seed data)
 
 ## Architecture
 
@@ -75,6 +75,12 @@ docker compose up -d --build
 
 Health check: `GET /healthz`
 
+## Demo Controls
+
+- `+ Add Task` creates a manual order and pushes it into the queue.
+- `E-Stop All` toggles pause/resume (and re-queues in-flight tasks when pausing).
+- `Reset Demo` restores a clean seed state (useful if the demo has been running a long time).
+
 ## Environment Variables
 
 | Variable | Default | Description |
@@ -97,7 +103,7 @@ docker run -p 8000:8000 -e GEMINI_API_KEY=your-key fleetmind
 ## Tech Stack
 
 - **Backend**: Python FastAPI + WebSocket
-- **AI**: Google Gemini 2.0 Flash
+- **AI**: Google Gemini (Flash model) + rules fallback
 - **Simulation**: Custom engine with A* pathfinding
 - **Frontend**: HTML5 Canvas + vanilla JavaScript
 - **Deployment**: Docker on Vultr VM
