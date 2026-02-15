@@ -71,7 +71,9 @@
 | **Locus Robotics** | AMR fleet management | Enterprise customers, proprietary hardware |
 | **FleetMind differentiator** | **SMB-first + vendor-agnostic + physical intelligence** | No one does all three together |
 
-## Founder Credibility Markers (VERIFIED)
+## Team Credibility
+
+### Ivan (Founder, Pitch)
 - 59 AI agents, 0 employees — VERIFIED
 - Six-figure ARR (NO exact number) — VERIFIED
 - 7M company database — VERIFIED
@@ -79,10 +81,17 @@
 - Accelerated by: Plug & Play, Antler, 500 Global — VERIFIED
 - 7 exits — VERIFIED
 - Patented methodology — VERIFIED
-- CES Best Startup Award — **NEEDS VERIFICATION (may be Attila's)**
-- Red Dot Design Award — **NEEDS VERIFICATION (may be Attila's)**
 - ~~YC S25 callback~~ — NOT TRUE, removed
 - ~~$250K ARR~~ — don't use exact figure
+- ~~CES Best Startup~~ — Attila's, not Ivan's
+- ~~Red Dot Award~~ — Attila's, not Ivan's
+
+### Attila (Co-founder / CTO, should attend)
+- Hardware and robotics background — adds credibility for physical AI pitch
+- CES Best Startup Award
+- Red Dot Design Award
+- Based in SF (on paper) — can attend MindsDB office
+- His presence signals "this is a real team, not a solo hackathon project"
 
 ## Live Demo
 - URL: http://149.28.198.127
@@ -174,7 +183,7 @@ Let me show you. This is live right now on a cloud VM. 12-robot warehouse, real-
 
 ---
 
-### SLIDE 5 — WHY ME
+### SLIDE 5 — WHY US
 
 **On slide:**
 - "I orchestrate autonomous agents at scale. This is the same problem."
@@ -183,9 +192,10 @@ Let me show you. This is live right now on a cloud VM. 12-robot warehouse, real-
 - Microsoft & ElevenLabs partnerships
 - Accelerated by Plug & Play, Antler, 500 Global
 - 7 exits | Patented methodology
+- Team: Ivan (AI orchestration) + Attila (hardware/robotics, CES Best Startup, Red Dot Award)
 
 **Speaker notes:**
-I run Markster, an AI-native agency. 59 autonomous AI agents, zero employees, six-figure revenue. I solve this exact problem every day — routing, prioritization, collision avoidance, resource management — for AI agents instead of physical robots. Partnerships with Microsoft and ElevenLabs. 7 million company database. Accelerated by Plug & Play, Antler, and 500 Global. Seven exits, patented methodology. This working demo was built in days because the engineering is the same problem at a different layer. Fleet orchestration is what I do.
+I run Markster, an AI-native agency. 59 autonomous AI agents, zero employees, six-figure revenue. I solve this exact problem every day — routing, prioritization, collision avoidance, resource management — for AI agents instead of physical robots. Partnerships with Microsoft and ElevenLabs. 7 million company database. Accelerated by Plug & Play, Antler, and 500 Global. Seven exits, patented methodology. And my co-founder Attila brings the hardware side — CES Best Startup, Red Dot Award winner, deep robotics background. This working demo was built in days because the engineering is the same problem at a different layer. Fleet orchestration is what we do.
 
 ---
 
