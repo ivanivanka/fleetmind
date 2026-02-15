@@ -41,6 +41,7 @@ Do (on screen):
 3. Click `+ Add Task` 2–3 times.
    - Call out the on-screen confirmation: “Task created: …”
    - Show the new `MAN-xxxx` task in “Recent Tasks”.
+   - If anything looks “stuck”, click `Reset Demo` (fresh fleet + seed tasks).
 4. Click `E-Stop All`.
    - Call out: “Simulation paused” and robots stop.
 5. Click `Resume`.
@@ -74,4 +75,3 @@ Show (end card or just speak it):
 
 Suggested X post text:
 - `Markster FleetMind AI: simulation-first control plane for warehouse robot fleets (task dispatch, routing, charging, live ops dashboard + Gemini insights). Demo: http://149.28.198.127/ Repo: https://github.com/ivanivanka/fleetmind @lablabai @Surgexyz_`
-

@@ -45,6 +45,7 @@ class WarehouseSimulation:
         self.pickup_zones: list[Position] = []
         self.dropoff_zones: list[Position] = []
         self._subscribers: list[asyncio.Queue] = []
+        self._lock: asyncio.Lock = asyncio.Lock()
         self._setup_warehouse()
         self._setup_robots()
 
@@ -52,6 +53,9 @@ class WarehouseSimulation:
         """Create warehouse layout with shelves, aisles, charging stations."""
         w, h = self.config.width, self.config.height
         self.grid = [[0] * w for _ in range(h)]
+        self.charging_stations = []
+        self.pickup_zones = []
+        self.dropoff_zones = []
 
         # Shelf rows (leaving aisles between them)
         shelf_rows = [4, 5, 8, 9, 12, 13, 16, 17, 20, 21]
@@ -269,6 +273,31 @@ class WarehouseSimulation:
     def _check_battery(self):
         """Send low-battery robots to charge."""
         for robot in self.robots.values():
+            # Critical: pre-empt tasks so robots don't die mid-run (demo stability).
+            if robot.state not in (RobotState.CHARGING, RobotState.MOVING_TO_CHARGE, RobotState.ERROR):
+                if robot.battery < self.config.critical_battery_threshold:
+                    if robot.current_task_id and robot.current_task_id in self.tasks:
+                        task = self.tasks[robot.current_task_id]
+                        if task.status in (TaskStatus.ASSIGNED, TaskStatus.IN_PROGRESS):
+                            task.status = TaskStatus.QUEUED
+                            task.assigned_robot_id = None
+                            task.started_at = None
+                    robot.current_task_id = None
+                    robot.error_message = None
+                    station = self._nearest_charging_station(robot.position)
+                    if station:
+                        path = self._find_path(robot.position, station)
+                        if path:
+                            robot.state = RobotState.MOVING_TO_CHARGE
+                            robot.target = station
+                            robot.path = path
+                            self._add_alert(
+                                "low_battery",
+                                f"Robot {robot.name} ({robot.id}) battery critical: {robot.battery:.0f}% (sent to charge)",
+                                robot_id=robot.id,
+                            )
+
+            # Normal: send idle/error robots to charge.
             if robot.state in (RobotState.IDLE, RobotState.ERROR):
                 if robot.battery < self.config.low_battery_threshold:
                     station = self._nearest_charging_station(robot.position)
@@ -278,15 +307,9 @@ class WarehouseSimulation:
                             robot.state = RobotState.MOVING_TO_CHARGE
                             robot.target = station
                             robot.path = path
-                            if robot.battery < self.config.critical_battery_threshold:
-                                self._add_alert(
-                                    "low_battery",
-                                    f"Robot {robot.name} ({robot.id}) battery critical: {robot.battery:.0f}%",
-                                    robot_id=robot.id,
-                                )
 
             # Emergency: robot runs out mid-task
-            if robot.battery <= 1.0 and robot.state not in (RobotState.CHARGING, RobotState.ERROR):
+            if robot.battery <= 1.0 and robot.state not in (RobotState.CHARGING, RobotState.MOVING_TO_CHARGE, RobotState.ERROR):
                 robot.state = RobotState.ERROR
                 robot.error_message = "Battery depleted"
                 robot.path = []
@@ -351,8 +374,8 @@ class WarehouseSimulation:
                 a.path.pop(0)
             if b.path:
                 b.path.pop(0)
-            a.battery -= self.config.battery_drain_per_move
-            b.battery -= self.config.battery_drain_per_move
+            a.battery = max(0.0, a.battery - self.config.battery_drain_per_move)
+            b.battery = max(0.0, b.battery - self.config.battery_drain_per_move)
             a.distance_traveled += 1
             b.distance_traveled += 1
             moved.add(a_id)
@@ -376,7 +399,7 @@ class WarehouseSimulation:
                 pos_to_id.pop((r.position.x, r.position.y), None)
                 r.position = nxt
                 r.path.pop(0)
-                r.battery -= self.config.battery_drain_per_move
+                r.battery = max(0.0, r.battery - self.config.battery_drain_per_move)
                 r.distance_traveled += 1
                 pos_to_id[(r.position.x, r.position.y)] = r.id
                 moved.add(r.id)
@@ -445,6 +468,7 @@ class WarehouseSimulation:
         active = sum(1 for r in self.robots.values() if r.state in (
             RobotState.MOVING_TO_PICKUP, RobotState.PICKING,
             RobotState.MOVING_TO_DROPOFF, RobotState.DROPPING,
+            RobotState.MOVING_TO_CHARGE,
         ))
         charging = sum(1 for r in self.robots.values() if r.state == RobotState.CHARGING)
         idle = sum(1 for r in self.robots.values() if r.state == RobotState.IDLE)
@@ -539,36 +563,36 @@ class WarehouseSimulation:
 
     async def tick(self):
         """Run one simulation tick."""
-        now = time.time()
+        async with self._lock:
+            now = time.time()
 
-        # E-stop / pause: keep broadcasting but don't mutate the world.
-        if self.paused:
-            await self._broadcast(self.get_state())
-            return
+            # E-stop / pause: keep broadcasting but don't mutate the world.
+            if self.paused:
+                state = self.get_state()
+            else:
+                self.tick_count += 1
 
-        self.tick_count += 1
+                # Generate new tasks periodically
+                if now - self.last_task_time >= self.config.task_generation_rate:
+                    # Soft-cap the queue to keep the demo stable/legible.
+                    if self._queued_task_count() < int(getattr(self.config, "max_queued_tasks", 25) or 25):
+                        self._generate_task()
+                    self.last_task_time = now
 
-        # Generate new tasks periodically
-        if now - self.last_task_time >= self.config.task_generation_rate:
-            # Soft-cap the queue to keep the demo stable/legible.
-            if self._queued_task_count() < int(getattr(self.config, "max_queued_tasks", 25) or 25):
-                self._generate_task()
-            self.last_task_time = now
+                self._check_battery()
+                self._assign_tasks()
+                self._move_robots()
+                self._prune_tasks()
 
-        self._check_battery()
-        self._assign_tasks()
-        self._move_robots()
-        self._prune_tasks()
+                # Record metrics every 10 ticks
+                if self.tick_count % 10 == 0:
+                    self.metrics_history.append(self.get_metrics())
+                    if len(self.metrics_history) > 360:
+                        self.metrics_history = self.metrics_history[-360:]
 
-        # Broadcast state
-        state = self.get_state()
+                state = self.get_state()
+
         await self._broadcast(state)
-
-        # Record metrics every 10 ticks
-        if self.tick_count % 10 == 0:
-            self.metrics_history.append(self.get_metrics())
-            if len(self.metrics_history) > 360:
-                self.metrics_history = self.metrics_history[-360:]
 
     async def run(self, tick_interval: float = 0.3):
         """Main simulation loop."""
@@ -592,6 +616,28 @@ class WarehouseSimulation:
 
     def resume(self):
         self.paused = False
+
+    async def reset(self):
+        """Reset simulation state in-place (keeps WebSocket subscribers)."""
+        async with self._lock:
+            self.paused = False
+            self.tick_count = 0
+            self.start_time = time.time()
+            self.last_task_time = time.time()
+            self.total_completed = 0
+            self.total_failed = 0
+            self.completion_times = []
+            self.alerts = []
+            self.metrics_history = []
+            self.tasks = {}
+            self.robots = {}
+            self._setup_warehouse()
+            self._setup_robots()
+            for _ in range(5):
+                self._generate_task()
+            state = self.get_state()
+
+        await self._broadcast(state)
 
     def acknowledge_alert(self, alert_id: str) -> bool:
         for alert in self.alerts:

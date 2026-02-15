@@ -106,10 +106,11 @@ class WarehouseConfig(BaseModel):
     task_generation_rate: float = 3.0  # seconds between new tasks
     max_queued_tasks: int = 25  # soft cap to keep the demo stable/legible
     max_total_tasks: int = 2000  # prevent unbounded growth over long runtimes
-    battery_drain_per_move: float = 0.3
-    battery_charge_per_tick: float = 2.0
-    low_battery_threshold: float = 20.0
-    critical_battery_threshold: float = 10.0
+    # Demo-tuned: keep the fleet moving for long sessions without "dying off".
+    battery_drain_per_move: float = 0.06
+    battery_charge_per_tick: float = 2.5
+    low_battery_threshold: float = 35.0
+    critical_battery_threshold: float = 20.0
 
 
 class MetricsSnapshot(BaseModel):

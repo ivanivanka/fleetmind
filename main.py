@@ -159,6 +159,12 @@ async def resume_sim():
     return {"paused": False}
 
 
+@app.post("/api/sim/reset")
+async def reset_sim():
+    await sim.reset()
+    return {"status": "reset"}
+
+
 @app.post("/api/tasks/create")
 async def create_task(pickup_x: int = 2, pickup_y: int = 2, dropoff_x: int = 37, dropoff_y: int = 2, priority: str = "normal"):
     task = sim.add_manual_task(pickup_x, pickup_y, dropoff_x, dropoff_y, priority)

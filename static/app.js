@@ -412,6 +412,18 @@ async function emergencyStopAll() {
     }
 }
 
+async function resetDemo() {
+    try {
+        setActionStatus('Resetting demo...', 'warn');
+        await fetch('/api/sim/reset', { method: 'POST' });
+        selectedRobot = null;
+        startTime = Date.now();
+        setActionStatus('Demo reset', 'ok');
+    } catch (e) {
+        setActionStatus('Demo reset failed', 'err');
+    }
+}
+
 // -- Canvas interaction --
 canvas.addEventListener('click', (e) => {
     if (!state) return;

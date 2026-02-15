@@ -18,6 +18,7 @@
 
 3. **Operator controls**
    - Click **+ Add Task** a few times to create backlog.
+   - If the sim ever looks stuck (e.g., lots of error robots), click **Reset Demo** to restore seed data and a fresh fleet.
    - Click **E-Stop All** to pause the simulation and stop robots (tasks re-queue).
    - Click **Resume** to continue.
 
@@ -33,3 +34,4 @@
 - `GET /api/metrics`
 - `GET /api/robots`
 - `GET /api/tasks`
+- `POST /api/sim/reset`
