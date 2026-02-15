@@ -460,11 +460,12 @@ function updateDashboard() {
     battEl.className = 'value ' + (batt > 50 ? 'green' : batt > 25 ? 'yellow' : 'red');
     document.getElementById('m-charging').textContent = `${metrics.robots_charging} charging`;
 
-    // Cost savings estimate: $4.20 per automated task vs $12 manual pick (~65% saving)
-    const costEl = document.getElementById('m-cost');
-    if (costEl) {
-        const saved = (metrics.tasks_completed * 7.80).toFixed(0); // $12 manual - $4.20 automated = $7.80 saved per task
-        costEl.textContent = '$' + Number(saved).toLocaleString();
+    // Avg task completion time (real metric from simulation)
+    const avgEl = document.getElementById('m-avgtime');
+    if (avgEl) {
+        const avg = metrics.avg_completion_time || 0;
+        avgEl.textContent = avg > 0 ? avg.toFixed(1) + 's' : '—';
+        avgEl.className = 'value ' + (avg > 0 && avg < 30 ? 'green' : avg < 60 ? '' : 'yellow');
     }
 
     // Pause / E-stop UI
