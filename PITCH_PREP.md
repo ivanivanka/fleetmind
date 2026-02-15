@@ -119,13 +119,19 @@ DeepMind's **Gemini Robotics-ER 1.5** is available via the Gemini API in Google 
 - Supply Chain Management Review: 2025 Warehouse/DC Operations Survey
 
 ## Competitor Landscape (for deck + Q&A)
+
+**NOTE: "FleetBridge" and "OmniPath" from Sanem's feedback are NOT real companies — they're other hackathon submissions. Real competitors:**
+
 | Competitor | What they do | Why FleetMind is different |
 |------------|-------------|---------------------------|
-| **FleetBridge** | Enterprise fleet orchestration | Enterprise-only, $500K+ integration, vendor-specific |
-| **OmniPath** | Multi-robot path planning | Routing-focused, not intelligence-focused. No AI insight layer. |
+| **InOrbit** | Cloud-based vendor-agnostic fleet mgmt | Enterprise-focused, no AI intelligence layer |
+| **GreyOrange (GreyMatter)** | Hardware-agnostic orchestration | Enterprise-only, complex deployment |
+| **CoEvolution** | Multi-agent orchestration software | Enterprise, no SMB offering |
+| **KINEXON** | AMR/AGV fleet management | Enterprise integration required |
+| **Roboteon** | Warehouse robotics orchestration | Enterprise |
 | **6 River Systems** (Shopify) | AMR fleet for warehouses | Single-vendor (their own robots). Acquired by Shopify. |
 | **Locus Robotics** | AMR fleet management | Enterprise customers, proprietary hardware |
-| **FleetMind differentiator** | **SMB-first + vendor-agnostic + physical intelligence** | No one does all three together |
+| **FleetMind differentiator** | **SMB-first + Gemini Robotics intelligence + vendor-agnostic** | No one does all three together |
 
 ## Team Credibility
 
@@ -208,12 +214,12 @@ I'm Ivan, this is Attila. We built FleetMind — a control plane for warehouse r
 
 **On slide:**
 - $10.9B warehouse robotics market in 2026 (Mordor Intelligence)
-- Existing platforms serve enterprise: FleetBridge, OmniPath, Locus, 6 River — $500K+ integration, vendor-locked
+- Existing platforms serve enterprise: InOrbit, GreyOrange, Locus, 6 River — $500K+ integration, vendor-locked
 - Mid-size warehouses (10-100 robots, multiple vendors): fastest-growing buyer segment. No intelligence layer exists.
 - "Most warehouses have zero visibility on how robot fleets impact inventory turns." — Robert Lee, 15yr warehouse ops
 
 **Speaker notes:**
-$10.9 billion market in 2026. The orchestration platforms exist — FleetBridge, OmniPath, Locus, 6 River. They all serve enterprise. $500K integrations, vendor lock-in, dedicated robotics teams required. But the fastest-growing buyer is the mid-size operator running 10 to 100 robots from multiple manufacturers. They have no intelligence layer. No cross-fleet visibility. Nobody is building for them.
+$10.9 billion market in 2026. The orchestration platforms exist — InOrbit, GreyOrange, Locus, 6 River. They all serve enterprise. $500K integrations, vendor lock-in, dedicated robotics teams required. But the fastest-growing buyer is the mid-size operator running 10 to 100 robots from multiple manufacturers. They have no intelligence layer. No cross-fleet visibility. Nobody is building for them.
 
 ---
 
@@ -274,8 +280,8 @@ Next step: ER 1.5 integration, then ROS2 bridge to real hardware. $150 per robot
 
 ## Q&A CHEAT SHEET
 
-**Q: How is this different from FleetBridge / OmniPath / Locus / 6 River?**
-A: They're all enterprise-first, vendor-locked, $500K+ integration. FleetBridge and OmniPath need dedicated robotics teams. 6 River and Locus sell their own robots — single vendor. FleetMind is the opposite: SMB-first, vendor-agnostic, intelligence-focused. We serve the 4,000+ mid-size operators that nobody else targets.
+**Q: How is this different from InOrbit / GreyOrange / Locus / 6 River?**
+A: InOrbit and GreyOrange are vendor-agnostic but enterprise-only — complex deployments, dedicated teams. 6 River and Locus sell their own robots — single vendor. FleetMind targets mid-size operators nobody else serves, with Gemini Robotics as the intelligence layer. SMB-first, vendor-agnostic, AI-native.
 
 **Q: This is a simulation — how do you get to real robots?**
 A: ROS2 bridge — the standard protocol that 90%+ of warehouse robots already speak. Our orchestration layer (pathfinding, dispatch, battery management, AI insight) is hardware-agnostic by design. The sim proves the intelligence works. Connecting to hardware is integration, not invention. And Gemini Robotics-ER 1.5's function calling means we define vendor APIs as callable functions — the model orchestrates them.
