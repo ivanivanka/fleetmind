@@ -1,30 +1,33 @@
-/* Markster FleetMind AI - Dashboard Frontend */
+/* Markster FleetMind AI - Dashboard Frontend (v2 — pitch-ready visuals) */
 
 const canvas = document.getElementById('warehouse-canvas');
 const ctx = canvas.getContext('2d');
 
 let state = null;
+let prevState = null;
 let ws = null;
 let selectedRobot = null;
 let startTime = Date.now();
 let cellSize = 20;
 let _actionTimer = null;
-let _renderTimer = null;
+let animT = 0;           // 0..1 interpolation progress
+let lastStateTime = 0;   // when we last received a state update
+let dashOffset = 0;       // animated dashes
 
 // Colors
 const COLORS = {
-    floor: '#111111',
-    shelf: '#2a2a2a',
-    shelfBorder: '#333333',
-    charge: '#332200',
+    floor: '#0d0d0d',
+    shelf: '#1e1e1e',
+    shelfBorder: '#2a2a2a',
+    charge: '#1a1400',
     chargeBorder: '#ffaa00',
-    pickup: '#112244',
+    pickup: '#0a1a30',
     pickupBorder: '#3388ff',
-    dropoff: '#221133',
+    dropoff: '#1a0a28',
     dropoffBorder: '#aa44ff',
-    grid: '#1a1a1a',
+    grid: '#141414',
     robot: {
-        idle: '#666666',
+        idle: '#555555',
         moving_to_pickup: '#00cc44',
         picking: '#00ff55',
         moving_to_dropoff: '#3388ff',
@@ -33,9 +36,14 @@ const COLORS = {
         charging: '#ff8800',
         error: '#ff3344',
     },
-    path: '#00cc4440',
-    target: '#00cc44',
 };
+
+// Previous robot positions for interpolation
+let prevPositions = {};
+
+function lerp(a, b, t) {
+    return a + (b - a) * Math.min(Math.max(t, 0), 1);
+}
 
 // -- WebSocket Connection --
 function connect() {
@@ -50,16 +58,17 @@ function connect() {
     ws.onmessage = (e) => {
         const data = JSON.parse(e.data);
         if (data.type === 'state_update') {
-            state = data;
-
-            // Throttle rendering to avoid UI stalls on slower machines.
-            if (!_renderTimer) {
-                _renderTimer = setTimeout(() => {
-                    _renderTimer = null;
-                    render();
-                    updateDashboard();
-                }, 100); // ~10 fps
+            // Save previous positions for interpolation
+            if (state && state.robots) {
+                for (const r of state.robots) {
+                    prevPositions[r.id] = { x: r.x, y: r.y };
+                }
             }
+            prevState = state;
+            state = data;
+            lastStateTime = performance.now();
+            animT = 0;
+            updateDashboard();
         }
     };
 
@@ -91,6 +100,20 @@ function resizeCanvas() {
     canvas.height = gridH * cellSize;
 }
 
+function drawRoundedRect(x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h - r);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    ctx.lineTo(x + r, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+    ctx.lineTo(x, y + r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.closePath();
+}
+
 function render() {
     if (!state) return;
     resizeCanvas();
@@ -99,13 +122,20 @@ function render() {
     const w = grid.width;
     const h = grid.height;
 
+    // Interpolation progress (smooth over ~400ms between state updates)
+    const elapsed = performance.now() - lastStateTime;
+    animT = Math.min(elapsed / 400, 1);
+
+    // Animated dash offset
+    dashOffset = (performance.now() / 80) % 12;
+
     // Clear
     ctx.fillStyle = COLORS.floor;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Grid lines
+    // Subtle grid (very faint)
     ctx.strokeStyle = COLORS.grid;
-    ctx.lineWidth = 0.5;
+    ctx.lineWidth = 0.3;
     for (let x = 0; x <= w; x++) {
         ctx.beginPath();
         ctx.moveTo(x * cellSize, 0);
@@ -127,20 +157,20 @@ function render() {
             const cy = y * cellSize;
 
             if (cell === 1) {
-                // Shelf
+                // Shelf — subtle with rounded corners
                 ctx.fillStyle = COLORS.shelf;
-                ctx.fillRect(cx + 1, cy + 1, cellSize - 2, cellSize - 2);
+                drawRoundedRect(cx + 1, cy + 1, cellSize - 2, cellSize - 2, 2);
+                ctx.fill();
                 ctx.strokeStyle = COLORS.shelfBorder;
-                ctx.lineWidth = 0.5;
-                ctx.strokeRect(cx + 1, cy + 1, cellSize - 2, cellSize - 2);
+                ctx.lineWidth = 0.3;
+                ctx.stroke();
             } else if (cell === 2) {
-                // Charging station
+                // Charging station — warm glow
                 ctx.fillStyle = COLORS.charge;
                 ctx.fillRect(cx, cy, cellSize, cellSize);
                 ctx.strokeStyle = COLORS.chargeBorder;
                 ctx.lineWidth = 1.5;
                 ctx.strokeRect(cx + 2, cy + 2, cellSize - 4, cellSize - 4);
-                // Lightning icon
                 ctx.fillStyle = COLORS.chargeBorder;
                 ctx.font = `${cellSize * 0.5}px sans-serif`;
                 ctx.textAlign = 'center';
@@ -151,95 +181,166 @@ function render() {
                 ctx.fillStyle = COLORS.pickup;
                 ctx.fillRect(cx, cy, cellSize, cellSize);
                 ctx.strokeStyle = COLORS.pickupBorder;
-                ctx.lineWidth = 1;
+                ctx.lineWidth = 0.8;
                 ctx.strokeRect(cx + 1, cy + 1, cellSize - 2, cellSize - 2);
             } else if (cell === 4) {
                 // Dropoff zone
                 ctx.fillStyle = COLORS.dropoff;
                 ctx.fillRect(cx, cy, cellSize, cellSize);
                 ctx.strokeStyle = COLORS.dropoffBorder;
-                ctx.lineWidth = 1;
+                ctx.lineWidth = 0.8;
                 ctx.strokeRect(cx + 1, cy + 1, cellSize - 2, cellSize - 2);
             }
         }
     }
 
-    // Robot paths
+    // Zone labels (only if cells are large enough)
+    if (cellSize >= 14) {
+        ctx.font = `bold ${Math.max(8, cellSize * 0.4)}px ${getComputedStyle(document.body).fontFamily}`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+
+        // Label pickup zones
+        for (const pz of grid.pickup_zones || []) {
+            ctx.fillStyle = '#3388ff60';
+            ctx.fillText('P', pz.x * cellSize + cellSize / 2, pz.y * cellSize + cellSize / 2);
+        }
+        // Label dropoff zones
+        for (const dz of grid.dropoff_zones || []) {
+            ctx.fillStyle = '#aa44ff60';
+            ctx.fillText('D', dz.x * cellSize + cellSize / 2, dz.y * cellSize + cellSize / 2);
+        }
+    }
+
+    // Robot paths — animated dashes
     for (const robot of robots) {
         if (robot.path && robot.path.length > 0) {
-            ctx.strokeStyle = COLORS.robot[robot.state] + '40';
+            const color = COLORS.robot[robot.state] || '#666';
+            ctx.strokeStyle = color + '30';
             ctx.lineWidth = 2;
-            ctx.setLineDash([3, 3]);
+            ctx.setLineDash([4, 4]);
+            ctx.lineDashOffset = -dashOffset;
+
+            // Get interpolated robot position
+            const prev = prevPositions[robot.id] || { x: robot.x, y: robot.y };
+            const rx = lerp(prev.x, robot.x, animT) * cellSize + cellSize / 2;
+            const ry = lerp(prev.y, robot.y, animT) * cellSize + cellSize / 2;
+
             ctx.beginPath();
-            ctx.moveTo(robot.x * cellSize + cellSize / 2, robot.y * cellSize + cellSize / 2);
+            ctx.moveTo(rx, ry);
             for (const p of robot.path) {
                 ctx.lineTo(p.x * cellSize + cellSize / 2, p.y * cellSize + cellSize / 2);
             }
             ctx.stroke();
             ctx.setLineDash([]);
+            ctx.lineDashOffset = 0;
 
-            // Target marker
+            // Target marker — pulsing ring
             if (robot.target) {
-                ctx.strokeStyle = COLORS.robot[robot.state] + '80';
-                ctx.lineWidth = 1.5;
                 const tx = robot.target.x * cellSize + cellSize / 2;
                 const ty = robot.target.y * cellSize + cellSize / 2;
+                const pulse = 0.8 + Math.sin(performance.now() / 300) * 0.2;
+                ctx.strokeStyle = color + '50';
+                ctx.lineWidth = 1.5;
                 ctx.beginPath();
-                ctx.arc(tx, ty, cellSize / 3, 0, Math.PI * 2);
+                ctx.arc(tx, ty, cellSize / 3 * pulse, 0, Math.PI * 2);
                 ctx.stroke();
             }
         }
     }
 
-    // Robots
+    // Robots — smooth interpolated positions, rounded rectangle shape
     for (const robot of robots) {
-        const rx = robot.x * cellSize + cellSize / 2;
-        const ry = robot.y * cellSize + cellSize / 2;
-        const r = cellSize * 0.38;
-        const color = COLORS.robot[robot.state] || '#666';
+        const prev = prevPositions[robot.id] || { x: robot.x, y: robot.y };
+        const rx = lerp(prev.x, robot.x, animT) * cellSize + cellSize / 2;
+        const ry = lerp(prev.y, robot.y, animT) * cellSize + cellSize / 2;
+        const size = cellSize * 0.72;
+        const half = size / 2;
+        const color = COLORS.robot[robot.state] || '#555';
 
-        // Glow for selected robot
-        if (selectedRobot === robot.id) {
+        // Glow for active/selected robots
+        const isActive = robot.state !== 'idle';
+        if (selectedRobot === robot.id || isActive) {
             ctx.shadowColor = color;
-            ctx.shadowBlur = 12;
+            ctx.shadowBlur = selectedRobot === robot.id ? 14 : 6;
         }
 
-        // Robot body
+        // Robot body — rounded rectangle
         ctx.fillStyle = color;
-        ctx.beginPath();
-        ctx.arc(rx, ry, r, 0, Math.PI * 2);
+        drawRoundedRect(rx - half, ry - half, size, size, cellSize * 0.15);
         ctx.fill();
 
         // Border
-        ctx.strokeStyle = '#ffffff30';
-        ctx.lineWidth = 1;
+        ctx.strokeStyle = 'rgba(255,255,255,0.12)';
+        ctx.lineWidth = 0.8;
         ctx.stroke();
+
+        // Inner detail — smaller rounded rect for "sensor" look
+        if (cellSize >= 14) {
+            ctx.fillStyle = 'rgba(0,0,0,0.3)';
+            const innerSize = size * 0.5;
+            const innerHalf = innerSize / 2;
+            drawRoundedRect(rx - innerHalf, ry - innerHalf, innerSize, innerSize, cellSize * 0.08);
+            ctx.fill();
+        }
 
         ctx.shadowColor = 'transparent';
         ctx.shadowBlur = 0;
 
+        // Direction indicator — small triangle showing movement direction
+        if (robot.path && robot.path.length > 0 && cellSize >= 12) {
+            const nextP = robot.path[0];
+            const dx = nextP.x - robot.x;
+            const dy = nextP.y - robot.y;
+            if (dx !== 0 || dy !== 0) {
+                const angle = Math.atan2(dy, dx);
+                const arrowDist = half + 2;
+                const ax = rx + Math.cos(angle) * arrowDist;
+                const ay = ry + Math.sin(angle) * arrowDist;
+                ctx.fillStyle = color;
+                ctx.beginPath();
+                ctx.arc(ax, ay, 2, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
         // Robot ID label
         if (cellSize >= 16) {
-            ctx.fillStyle = '#000';
-            ctx.font = `bold ${Math.max(cellSize * 0.3, 7)}px monospace`;
+            ctx.fillStyle = '#fff';
+            ctx.font = `bold ${Math.max(cellSize * 0.28, 7)}px monospace`;
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText(robot.id.replace('R', ''), rx, ry);
+            ctx.fillText(robot.id.replace('R0', '').replace('R', ''), rx, ry);
         }
 
         // Battery indicator bar
         if (cellSize >= 14) {
-            const barW = cellSize * 0.7;
-            const barH = 2;
+            const barW = size;
+            const barH = 2.5;
             const barX = rx - barW / 2;
-            const barY = ry + r + 2;
-            ctx.fillStyle = '#000';
-            ctx.fillRect(barX, barY, barW, barH);
+            const barY = ry + half + 3;
+            // Background
+            ctx.fillStyle = 'rgba(0,0,0,0.5)';
+            drawRoundedRect(barX, barY, barW, barH, 1);
+            ctx.fill();
+            // Fill
             const battColor = robot.battery > 50 ? '#00cc44' : robot.battery > 20 ? '#ffaa00' : '#ff3344';
             ctx.fillStyle = battColor;
-            ctx.fillRect(barX, barY, barW * (robot.battery / 100), barH);
+            const fillW = barW * (robot.battery / 100);
+            if (fillW > 2) {
+                drawRoundedRect(barX, barY, fillW, barH, 1);
+                ctx.fill();
+            }
         }
     }
+}
+
+// -- Animation Loop (60fps smooth rendering) --
+function animationLoop() {
+    if (state) {
+        render();
+    }
+    requestAnimationFrame(animationLoop);
 }
 
 // -- Dashboard Updates --
@@ -358,7 +459,6 @@ function updateDashboard() {
 // -- Actions --
 function selectRobot(id) {
     selectedRobot = selectedRobot === id ? null : id;
-    render();
 }
 
 async function addTask() {
@@ -417,6 +517,7 @@ async function resetDemo() {
         setActionStatus('Resetting demo...', 'warn');
         await fetch('/api/sim/reset', { method: 'POST' });
         selectedRobot = null;
+        prevPositions = {};
         startTime = Date.now();
         setActionStatus('Demo reset', 'ok');
     } catch (e) {
@@ -433,7 +534,6 @@ canvas.addEventListener('click', (e) => {
     const gx = Math.floor(mx / cellSize);
     const gy = Math.floor(my / cellSize);
 
-    // Check if a robot was clicked
     for (const robot of state.robots) {
         if (robot.x === gx && robot.y === gy) {
             selectRobot(robot.id);
@@ -441,7 +541,6 @@ canvas.addEventListener('click', (e) => {
         }
     }
     selectedRobot = null;
-    render();
 });
 
 // -- AI Insight auto-refresh --
@@ -458,3 +557,4 @@ window.addEventListener('resize', () => { if (state) render(); });
 
 // -- Init --
 connect();
+requestAnimationFrame(animationLoop);
