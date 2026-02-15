@@ -23,6 +23,7 @@ app = FastAPI(title="Markster FleetMind AI", version="1.0.0")
 sim: WarehouseSimulation = None
 ai: FleetMindAI = None
 sim_task: asyncio.Task = None
+watchdog_task: asyncio.Task = None
 
 _ai_insight_cache: dict[str, object] = {
     "ts": 0.0,
@@ -35,7 +36,7 @@ _ai_insight_lock = asyncio.Lock()
 
 @app.on_event("startup")
 async def startup():
-    global sim, ai, sim_task
+    global sim, ai, sim_task, watchdog_task
     config = WarehouseConfig(
         num_robots=int(os.environ.get("FLEET_SIZE", "12")),
         task_generation_rate=float(os.environ.get("TASK_RATE", "3.0")),
@@ -45,15 +46,61 @@ async def startup():
     sim = WarehouseSimulation(config)
     ai = FleetMindAI()
     sim_task = asyncio.create_task(sim.run(tick_interval=0.3))
+    watchdog_task = asyncio.create_task(_watchdog_loop())
     logger.info(f"FleetMind started with {config.num_robots} robots")
 
 
 @app.on_event("shutdown")
 async def shutdown():
+    global watchdog_task
     if sim:
         sim.stop()
     if sim_task:
         sim_task.cancel()
+    if watchdog_task:
+        watchdog_task.cancel()
+
+
+async def _watchdog_loop():
+    """Keep the public demo healthy over long runtimes.
+
+    If the sim stops making observable progress (no movement / no completions)
+    for an extended period, auto-reset to restore activity.
+    """
+    last_completed = 0
+    last_distance = 0.0
+    no_progress_s = 0
+    interval_s = 20
+    reset_after_s = 180
+
+    while True:
+        await asyncio.sleep(interval_s)
+        if not sim:
+            continue
+        if getattr(sim, "paused", False):
+            no_progress_s = 0
+            continue
+
+        try:
+            metrics = sim.get_metrics()
+            completed = int(metrics.tasks_completed)
+            distance = float(metrics.total_distance)
+
+            progressed = (completed > last_completed) or (distance > last_distance)
+            last_completed = completed
+            last_distance = distance
+
+            if progressed:
+                no_progress_s = 0
+                continue
+
+            no_progress_s += interval_s
+            if no_progress_s >= reset_after_s:
+                logger.warning("Watchdog: no progress detected; auto-resetting demo")
+                await sim.reset()
+                no_progress_s = 0
+        except Exception as e:
+            logger.warning(f"Watchdog error: {e}")
 
 
 # Serve static files
