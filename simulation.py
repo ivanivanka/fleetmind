@@ -385,6 +385,7 @@ class WarehouseSimulation:
         pos_to_id = {(r.position.x, r.position.y): r.id for r in self.robots.values()}
 
         # Normal moves into free cells
+        blocked_robots: list[Robot] = []
         for r in self.robots.values():
             if r.id in moved:
                 continue
@@ -403,6 +404,16 @@ class WarehouseSimulation:
                 r.distance_traveled += 1
                 pos_to_id[(r.position.x, r.position.y)] = r.id
                 moved.add(r.id)
+            else:
+                # Blocked — mark for re-pathing
+                blocked_robots.append(r)
+
+        # Phase 2b: re-path blocked robots so they route around obstacles
+        for r in blocked_robots:
+            if r.target:
+                new_path = self._find_path(r.position, r.target)
+                if new_path:
+                    r.path = new_path
 
         # Phase 3: state transitions and task state machine
         for robot in self.robots.values():
