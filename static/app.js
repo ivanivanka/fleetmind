@@ -460,12 +460,12 @@ function updateDashboard() {
     battEl.className = 'value ' + (batt > 50 ? 'green' : batt > 25 ? 'yellow' : 'red');
     document.getElementById('m-charging').textContent = `${metrics.robots_charging} charging`;
 
-    // Avg task completion time (real metric from simulation)
-    const avgEl = document.getElementById('m-avgtime');
-    if (avgEl) {
-        const avg = metrics.avg_completion_time || 0;
-        avgEl.textContent = avg > 0 ? avg.toFixed(1) + 's' : '—';
-        avgEl.className = 'value ' + (avg > 0 && avg < 30 ? 'green' : avg < 60 ? '' : 'yellow');
+    // Est. cost saved: industry avg manual pick = $3.20 B2C (Fulfillment Advisor 2025 survey, 600+ warehouses)
+    // Automated picking reduces labor ~50%, so ~$1.60 saved per pick
+    const costEl = document.getElementById('m-cost');
+    if (costEl) {
+        const saved = (metrics.tasks_completed * 1.60).toFixed(0);
+        costEl.textContent = '$' + Number(saved).toLocaleString();
     }
 
     // Pause / E-stop UI
